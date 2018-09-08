@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+	<head>
+		<title>Sonar Messaging</title>
+		<meta charset="UTF-8">
+		<link type="text/css" rel="stylesheet" href="/bootstrap/css/bootstrap.css">
+	</head>
+	<body>
+		<div class="row centered-form center-block">
+			<div class="container col-md-10 col-md-offset-1">
+				<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+					<div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+						<ul class="navbar-nav mr-auto">
+							<li class="nav-item active">
+								<a class="nav-link" href="#">Nav Bar Link stub left</a>
+							</li>
+						</ul>
+					</div>
+					<div class="mx-auto order-0">
+						<a class="navbar-brand mx-auto" href="#">Sonar Messaging</a>
+					</div>
+					<div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+						<ul class="navbar-nav ml-auto">
+							<li class="nav-item">
+								<a href="{{ url|safe }}" class="btn">{{ url_linktext }}</a>
+							</li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+		</div>
+		<!--CONTENT-->
+		<div class="row justify-content-center">
+			<table style="height: 500px;">
+				<tbody>
+					<tr>
+						<td class="align-middle"><h1> Welcome to Sonar Messaging </h1></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<!--CONTENT END-->
+	</body>
+</html>
+{% endautoescape %}
