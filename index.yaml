@@ -1,6 +1,1 @@
 indexes:
-- kind: Greeting
-  ancestor: yes
-  properties:
-  - name: date
-    direction: desc
