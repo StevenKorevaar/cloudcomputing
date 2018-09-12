@@ -23,66 +23,66 @@
 		<header class="mdl-layout__header">
 				<div class="mdl-layout__header-row" >
 						<!-- Title -->
-						<span class="mdl-layout-title ">Sonar</span>
-
+						<span class="mdl-layout-title ">Chat with <b>Ryan</b></span>
 				</div>
 		</header>
 		<div class="mdl-layout__drawer">
-				<span class="mdl-layout-title">Title</span>
+			<span class="mdl-layout-title">Conversations</span>
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active">
+					<a class="nav-link" href="/">Home Page</a>
+				</li>
+			</ul>
 		</div>
 		<main class="mdl-layout__content">
-				<div class="room-messages">
-					
-					<div class="messageBox sent">
-						<p class="sender">Steven:</p>
-					<div class="messageText message sent">
-						Hello There!
-					</div>
-						<div class="messageTime messageText">14:57</div>
-					</div>
-					
-					<div class="messageBox received">
-						<p class="sender">Ryan:</p>
-					<div class="messageText message received">
-						yo yo yo!
-					</div>
-						<div class="messageTime messageText">15:03</div>
-					</div>
-					
-					<div class="messageBox sent">
-						<p class="sender">Steven:</p>
-					<div class="messageText message sent">GOOD BYE!</div>
-						<div class="messageTime messageText">15:04</div>
-					</div>
-					
-						<div id="console"></div>
+			<div class="room-messages">
+				
+				<div class="messageBox sent">
+					<p class="sender">Steven:</p>
+				<div class="messageText message sent">
+					Hello There!
 				</div>
-				<div class="response">
-						
-						<ul>
-								<li>
-										<div class="mdl-textfield mdl-js-textfield">
-												<textarea id="msg" class="mdl-textfield__input fullWidth" rows="1"></textarea>
+					<div class="messageTime messageText">14:57</div>
+				</div>
+				
+				<div class="messageBox received">
+					<p class="sender">Ryan:</p>
+				<div class="messageText message received">
+					yo yo yo!
+				</div>
+					<div class="messageTime messageText">15:03</div>
+				</div>
+				
+				<div class="messageBox sent">
+					<p class="sender">Steven:</p>
+				<div class="messageText message sent">GOOD BYE!</div>
+					<div class="messageTime messageText">15:04</div>
+				</div>
+				
+					<div id="console"></div>
+			</div>
+			<div class="response">	
+				<ul>
+					<li>
+						<div class="mdl-textfield mdl-js-textfield">
+							<textarea id="msg" class="mdl-textfield__input fullWidth" rows="1"></textarea>
 							<label class="mdl-textfield__label" for="sample5">Type your message...</label>
-										</div>  
-								</li>
-								
-								<li>
-										<button type="button" onClick="sendMessage()" id="send" class="mdl-button mdl-button--colored mdl-js-button mdl-button--raised mdl-js-ripple-effect">
-								SEND
+						</div>  
+					</li>
+
+					<li>
+						<button type="button" onClick="sendMessage()" id="send" class="mdl-button mdl-button--colored mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+						SEND
 						</button>
-								</li>
-								
-						</ul>
-		
-		
-		<!--
-		<textarea id="msg" class="" placeholder="Type your message here..."></textarea>
-		-->
-		
-		<!-- Raised button with ripple -->
-		
-				</div>
+					</li>
+				</ul>
+			<!--
+			<textarea id="msg" class="" placeholder="Type your message here..."></textarea>
+			-->
+			
+			<!-- Raised button with ripple -->
+			
+			</div>
 		</main>
 	</div>    
 </body>
