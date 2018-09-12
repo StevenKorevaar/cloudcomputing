@@ -52,9 +52,32 @@ class MainPage(webapp2.RequestHandler):
         self.response.write(template.render(template_values))
 # [END main_page]
 
+# [START chat_page]
+class ChatPage(webapp2.RequestHandler):
+
+    def get(self):
+        user = users.get_current_user()
+        if user:
+            url = users.create_logout_url(self.request.uri)
+            url_linktext = 'Logout'
+        else:
+            url = users.create_login_url(self.request.uri)
+            url_linktext = 'Login or Create using Google account'
+
+        template_values = {
+            'user': user,
+            'url': url,
+            'url_linktext': url_linktext,
+        }
+
+        template = JINJA_ENVIRONMENT.get_template('chat.php')
+        self.response.write(template.render(template_values))
+# [END chat_page]
+
 
 # [START app]
 app = webapp2.WSGIApplication([
     ('/', MainPage),
+    ('/chat', ChatPage),
 ], debug=True)
 # [END app]

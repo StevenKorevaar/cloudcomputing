@@ -1,0 +1,213 @@
+html
+{
+     background-color:rgb(234, 234, 234);
+}
+
+* {
+    box-sizing:border-box;
+}
+
+.stayOnBottom
+{
+    position:fixed;
+    bottom:0;
+}
+
+.fullWidth
+{
+    width:100%;
+}
+
+.textBox
+{
+    width:90%;
+}
+
+.mdl-layout__header
+{
+    
+}
+
+@media screen and (max-width: 1024px) {
+    .mdl-layout__header-row
+    {
+        min-height:36px;
+        height:36px;
+    }
+    .mdl-layout__header
+    {
+        min-height:36px;
+        height:36px;
+    }
+    .mdl-layout__drawer-button{
+        height:30px;
+        line-height:34px;
+    }
+}
+
+.room-messages {
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:50px;
+    width:100%;
+    overflow-y:auto;
+    overflow-x:hidden;
+}
+
+.sender
+{
+    margin:0px;
+}
+
+.messageBox
+{
+    text-align:left;
+    margin:0px 5px 0px 5px;
+}
+
+.messageBox.sent
+{
+    text-align:right;
+}
+.messageBox.received
+{
+    text-align:left;
+}
+
+.message
+{
+    display: inline-block;
+    padding: 10px 15px 10px 15px;
+    margin-top:5px;
+    color:rgb(0,0,0);
+    background-color: rgb(255, 255, 255);
+    border-radius: 2px 5px 5px 5px;
+    
+}
+
+.message.sent
+{
+    background-color: rgb(103,58,183);
+    border-radius: 5px 2px 5px 5px;
+    color:rgb(255,255,255);
+}
+
+.message.received
+{
+    background-color: rgb(255, 255, 255);
+    color:rgb(0,0,0);
+}
+
+.messageTime
+{
+    opacity:0.5;
+}
+
+.response {
+    position:absolute;
+    bottom:0;
+    left:0;
+    right:0;
+    background:#ddd;
+    height:auto;
+}
+
+.response > ul {
+    list-style:none;
+    margin:0;
+    padding:0;
+}
+
+.response > ul > li {
+    display:inline-block;
+    padding:0px;
+    margin:10px 5px 0px 5px;
+}
+
+.response > ul > li:first-child {
+    width:calc(100% - 90px);
+}
+
+.response textarea {
+    resize:none;
+}
+
+.response .mdl-textfield {
+    padding:0px;
+    width:100%;
+}
+
+.response .mdl-textfield__label {
+    top:0px;
+    padding:5px 10px 10px 10px;
+}
+
+.response .mdl-textfield__label:after {
+    bottom:0;
+}
+
+.response .mdl-textfield__input {
+    padding:5px 10px 10px 10px;
+}
+
+.mdl-button--colored
+{
+    height:30px;
+    line-height:30px;
+}
+
+
+#msg {
+
+        
+}
+
+
+li 
+{
+    float:left;
+}
+
+button
+{
+    margin:10px 0px;
+}
+
+/* Overlay */
+#overlay {
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    margin:auto;
+    background-color:rgba(255,255,255,0.8);
+    z-index:1000;
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transition:opacity 0.25s ease, visibility 0.25s ease;
+}
+
+#overlay.show {
+    opacity:1;
+    visibility:visible;
+}
+
+#overlay > div {
+    position:absolute;
+    width:500px;
+    margin:auto;
+    height:90px;
+    top:0;
+    left:0;
+    bottom:0;
+    right:0;
+}
+
+#overlay h1 {
+    margin:0px 0px 10px 0px;
+    text-align:center;
+}
