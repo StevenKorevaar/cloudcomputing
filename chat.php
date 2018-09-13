@@ -39,23 +39,23 @@
 				
 				<div class="messageBox sent">
 					<p class="sender">Steven:</p>
-				<div class="messageText message sent">
-					Hello There!
-				</div>
+					<div class="messageText message sent">
+						Hello There!
+					</div>
 					<div class="messageTime messageText">14:57</div>
 				</div>
 				
 				<div class="messageBox received">
 					<p class="sender">Ryan:</p>
-				<div class="messageText message received">
-					yo yo yo!
-				</div>
+					<div class="messageText message received">
+						yo yo yo!
+					</div>
 					<div class="messageTime messageText">15:03</div>
 				</div>
 				
 				<div class="messageBox sent">
 					<p class="sender">Steven:</p>
-				<div class="messageText message sent">GOOD BYE!</div>
+					<div class="messageText message sent">GOOD BYE!</div>
 					<div class="messageTime messageText">15:04</div>
 				</div>
 				
@@ -94,6 +94,41 @@
 	<script type="text/javascript" src="socketio.js"></script>
     -->
 	<script>
+		function sendMessage() {
+			var message = $('#msg').val();
+			$('#msg').val('');
+    	    
+			var sentOrReceieved = "sent";
+			var color = "mdl-color--primary";
+			var userName = "Steven";
+			var time = timeNow();
+
+    	    var element = $("<div class=\"messageBox "+sentOrReceieved+"\">"
+            	+	"<p class=\"sender\">"
+            	+		userName +":"
+            	+	"</p>"
+            	+	"<div class=\"message  "+sentOrReceieved+" "+color+" messageText\">"
+            	+		message
+            	+	"</div>"
+				+	"<div class=\"messageTime messageText\">"+time+"</div>"
+            	+"</div>");
+    	    
+    	    $('.room-messages').append(element);
+    			
+            var height = $('.room-messages')[0].scrollHeight;
+            $('.room-messages').scrollTop(height);
+
+		}
+
+		function timeNow() {
+			var d = new Date(),
+				h = (d.getHours()<10?'0':'') + d.getHours(),
+				m = (d.getMinutes()<10?'0':'') + d.getMinutes();
+			console.log(h);
+			console.log(m);
+			return (h + ':' + m);
+		}
+
         /* global $, io 
         var userDetails = null;
         var currentRoom = null;
