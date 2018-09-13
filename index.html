@@ -8,6 +8,9 @@
 		<script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
 		<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+		
+		<link rel="stylesheet" href="css/homeStyle.css">
+
 	</head>
 	<body>
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -15,7 +18,7 @@
 				<span class="navbar-toggler-icon"></span>
 			</button>
 			<div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-				<a class="navbar-brand" href="#">Hidden brand</a>
+				<a class="navbar-brand" href="#">Sonar Messaging</a>
 				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 					<li class="nav-item active">
 						<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
@@ -23,58 +26,78 @@
 					<li class="nav-item">
 						<a class="nav-link" href="/chat">Chat Page</a>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link disabled" href="#">Disabled</a>
-					</li>
 				</ul>
 				<form class="form-inline my-2 my-lg-0">
 					<li class="nav-item">
 						<a href="{{ url|safe }}" class="btn">{{ url_linktext }}</a>
 					</li>
 					<!--
-
-					
 					<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
 					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 					-->
 				</form>
 			</div>
 		</nav>
-		<!--
-		<div class="row centered-form center-block">
-			<div class="container col-md-10 col-md-offset-1">
-				<nav class="navbar navbar-expand-md navbar-dark bg-dark">
-					<div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
-						<ul class="navbar-nav mr-auto">
-							<li class="nav-item active">
-								<a class="nav-link" href="/chat">Chat with Ryan</a>
-							</li>
-						</ul>
-					</div>
-					<div class="mx-auto order-0">
-						<a class="navbar-brand mx-auto" href="#">Sonar Messaging</a>
-					</div>
-					<div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
-						<ul class="navbar-nav ml-auto">
-							<li class="nav-item">
-								<a href="{{ url|safe }}" class="btn">{{ url_linktext }}</a>
-							</li>
-						</ul>
-					</div>
-				</nav>
-			</div>
-		</div>
-		-->
+		
 		<!--CONTENT-->
-		<div class="row justify-content-center">
-			<table style="height: 500px;">
-				<tbody>
-					<tr>
-						<td class="align-middle"><h1> Welcome to Sonar Messaging </h1></td>
-					</tr>
-				</tbody>
-			</table>
+
+		<div id="outer"> 
+			<div class="row justify-content-center inner_fixed">
+				<div class="align-middle"><h1> Welcome to Sonar Messaging </h1></div>
+			</div>
+		
+			<div class="inner_remaining">
+				<div id="map"></div>
+			</div>			
 		</div>
+		
+
+		<script>
+				// Note: This example requires that you consent to location sharing when
+				// prompted by your browser. If you see the error "The Geolocation service
+				// failed.", it means you probably did not give permission for the browser to
+				// locate you.
+				var map, infoWindow;
+				function initMap() {
+					map = new google.maps.Map(document.getElementById('map'), {
+						center: {lat: -34.397, lng: 150.644},
+						zoom: 14,
+					});
+					infoWindow = new google.maps.InfoWindow;
+	
+					// Try HTML5 geolocation.
+					if (navigator.geolocation) {
+						navigator.geolocation.getCurrentPosition(function(position) {
+							var pos = {
+								lat: position.coords.latitude,
+								lng: position.coords.longitude
+							};
+	
+							infoWindow.setPosition(pos);
+							infoWindow.setContent('Location found.');
+							infoWindow.open(map);
+							map.setCenter(pos);
+						}, function() {
+							handleLocationError(true, infoWindow, map.getCenter());
+						});
+					} else {
+						// Browser doesn't support Geolocation
+						handleLocationError(false, infoWindow, map.getCenter());
+					}
+				}
+	
+				function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+					infoWindow.setPosition(pos);
+					infoWindow.setContent(browserHasGeolocation ?
+																'Error: The Geolocation service failed.' :
+																'Error: Your browser doesn\'t support geolocation.');
+					infoWindow.open(map);
+				}
+		</script>
+
+		<script async defer
+			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZULS1p2yS3IaUMN6fjhiRmOHrUBziuB4&callback=initMap";>
+		</script>
 		<!--CONTENT END-->
 	</body>
 </html>
