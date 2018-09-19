@@ -1,0 +1,19 @@
+{
+  // Realtime Database Security Rules
+  "database": {
+    "rules": "database-rules.json"
+  },
+  // Storage Security Rules
+  "storage": {
+    "rules": "storage.rules"
+  },
+  "hosting": {
+    "public": "./",
+    "ignore": [
+      "firebase.json",
+      "database-rules.json",
+      "storage.rules",
+      "functions"
+    ]
+  }
+}
