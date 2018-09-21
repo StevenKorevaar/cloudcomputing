@@ -1,0 +1,33 @@
+
+
+/* FILL CONTENT */
+html, body, #outer {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  z-index: 10;
+}
+
+#outer {
+  display: table;
+}
+
+#inner_fixed {
+  height: 100px;
+  background-color: grey;
+
+  display: table-row;
+}
+
+#inner_remaining {
+  background-color: #DDDDDD;
+
+  display: table-row;    
+  height: calc(100% - 100px); 
+}
+
+/* MAP */
+#map {
+  height: 500px; 
+  z-index: 0;
+}
