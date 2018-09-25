@@ -117,10 +117,20 @@
 <script src="https://www.gstatic.com/firebasejs/5.5.0/firebase-storage.js"></script>
 <script src="https://www.gstatic.com/firebasejs/5.5.0/firebase-firestore.js"></script>
 <script src="https://www.gstatic.com/firebasejs/5.5.0/firebase-messaging.js"></script>
-<script src="https://www.gstatic.com/firebasejs/5.5.0/init.js"></script>
+<script >
+  if (typeof firebase === 'undefined') throw new Error('hosting/init-error: Firebase SDK not detected. You must include it before /__/firebase/init.js');
+  firebase.initializeApp({
+    "apiKey": "AIzaSyCwOLKZT8bLrkGjmbqMrwbqCSYA3M6F_TE",
+    "databaseURL": "https://cc-assignment2-sonar-msg.firebaseio.com",
+    "storageBucket": "cc-assignment2-sonar-msg.appspot.com",
+    "authDomain": "cc-assignment2-sonar-msg.firebaseapp.com",
+    "messagingSenderId": "706079279024",
+    "projectId": "cc-assignment2-sonar-msg"
+  });
+</script>
 
 <script>
-  firebase.initializeApp(defaultAppConfig);
+  //firebase.initializeApp(defaultAppConfig);
 </script>
 
 <script src="scripts/main.js"></script>
