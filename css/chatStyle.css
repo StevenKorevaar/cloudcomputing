@@ -216,7 +216,7 @@ button
     display: inline-block;
 }
 
-#message {
+#MessageTextAndLabel {
     display: inline-block;
     width: 90%;
 }
@@ -229,7 +229,7 @@ button
 #message-form {
     display: inline-block;
     flex-direction: row;
-    width: calc(100% - 65px);
+    width: calc(100% - 70px);
     /*float: left;*/
   }
   
