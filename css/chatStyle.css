@@ -50,7 +50,7 @@ html
     top:0;
     left:0;
     right:0;
-    bottom:50px;
+    bottom:150px;
     width:100%;
     overflow-y:auto;
     overflow-x:hidden;
@@ -211,3 +211,31 @@ button
     margin:0px 0px 10px 0px;
     text-align:center;
 }
+
+.response {
+    display: inline-block;
+}
+
+#message {
+    display: inline-block;
+    width: 90%;
+}
+
+#submit {
+    display: inline-block;
+    width: 9%;
+}
+
+#message-form {
+    display: inline-block;
+    flex-direction: row;
+    width: calc(100% - 65px);
+    /*float: left;*/
+  }
+  
+  #image-form {
+    display: inline-block;
+    flex-direction: row;
+    width: 65px;
+    /*float: right;*/
+  }
