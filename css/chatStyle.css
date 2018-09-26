@@ -23,10 +23,6 @@ html
     width:90%;
 }
 
-.mdl-layout__header
-{
-    
-}
 
 @media screen and (max-width: 1024px) {
     .mdl-layout__header-row
@@ -157,12 +153,6 @@ html
 {
     height:30px;
     line-height:30px;
-}
-
-
-#msg {
-
-        
 }
 
 
