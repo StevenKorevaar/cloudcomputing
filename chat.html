@@ -22,7 +22,8 @@
 		<div class="mdl-layout__drawer">
 			<span class="mdl-layout-title">Conversations</span>
 			<ul class="navbar-nav mr-auto">
-				<li id="user-container">
+				
+				<li id="user-container" style="display: none;">
 					<div hidden id="user-pic"></div>
 					<div hidden id="user-name"></div>
 					<button hidden id="sign-out" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
@@ -32,6 +33,8 @@
 						<i class="material-icons">account_circle</i>Sign-in with Google
 					</button>
 				</li>
+				
+				</br>
 				<li class="nav-item active">
 					<a class="nav-link" href="/">Home Page</a>
 				</li>
@@ -68,7 +71,7 @@
 				</form>
 
 				<form id="image-form" action="#">
-					<!--<input id="mediaCapture" type="file" accept="image/*" capture="camera">-->
+					<input id="mediaCapture" type="file" accept="image/*" capture="camera">
 					<button id="submitImage" title="Add an image" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--amber-400 mdl-color-text--white">
 						<i class="material-icons">image</i>
 					</button>

@@ -40,8 +40,8 @@ function loadMessages() {
     displayMessage(snap.key, data.name, data.text, data.profilePicUrl, data.imageUrl);
   };
 
-  firebase.database().ref('/messages/').limitToLast(12).on('child_added', callback);
-  firebase.database().ref('/messages/').limitToLast(12).on('child_changed', callback);
+  firebase.database().ref('/messages/').limitToLast(100).on('child_added', callback);
+  firebase.database().ref('/messages/').limitToLast(100).on('child_changed', callback);
 }
 
 // Saves a new message on the Firebase DB.
@@ -202,7 +202,7 @@ function resetMaterialTextfield(element) {
 
 // Template for messages.
 var MESSAGE_TEMPLATE =
-    '<div class="message-container">' +
+    '<div class="message-container messageBox">' +
       '<div class="spacing"><div class="pic"></div></div>' +
       '<div class="message"></div>' +
       '<div class="name"></div>' +
@@ -233,6 +233,7 @@ function displayMessage(key, name, text, picUrl, imageUrl) {
     messageElement.innerHTML = messageElement.innerHTML.replace(/\n/g, '<br>');
   } else if (imageUrl) { // If the message is an image.
     var image = document.createElement('img');
+    image.classList.add("imageMessage");
     image.addEventListener('load', function() {
       messageListElement.scrollTop = messageListElement.scrollHeight;
     });
@@ -284,8 +285,8 @@ var signInSnackbarElement = document.getElementById('must-signin-snackbar');
 
 // Saves message on form submit.
 messageFormElement.addEventListener('submit', onMessageFormSubmit);
-signOutButtonElement.addEventListener('click', signOut);
-signInButtonElement.addEventListener('click', signIn);
+//signOutButtonElement.addEventListener('click', signOut);
+//signInButtonElement.addEventListener('click', signIn);
 
 // Toggle for the button.
 messageInputElement.addEventListener('keyup', toggleButton);
@@ -296,7 +297,7 @@ imageButtonElement.addEventListener('click', function(e) {
   e.preventDefault();
   mediaCaptureElement.click();
 });
-//mediaCaptureElement.addEventListener('change', onMediaFileSelected);
+mediaCaptureElement.addEventListener('change', onMediaFileSelected);
 
 // initialize Firebase
 initFirebaseAuth();

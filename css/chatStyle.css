@@ -50,7 +50,7 @@ html
     top:0;
     left:0;
     right:0;
-    bottom:150px;
+    bottom:37px;
     width:100%;
     overflow-y:auto;
     overflow-x:hidden;
@@ -65,6 +65,7 @@ html
 {
     text-align:left;
     margin:0px 5px 0px 5px;
+    border-bottom: 1px solid #cccccc;
 }
 
 .messageBox.sent
@@ -80,7 +81,7 @@ html
 {
     display: inline-block;
     padding: 10px 15px 10px 15px;
-    margin-top:5px;
+    margin-top:10px;
     color:rgb(0,0,0);
     background-color: rgb(255, 255, 255);
     border-radius: 2px 5px 5px 5px;
@@ -231,11 +232,19 @@ button
     flex-direction: row;
     width: calc(100% - 70px);
     /*float: left;*/
-  }
+}
   
-  #image-form {
+#image-form {
     display: inline-block;
     flex-direction: row;
     width: 65px;
     /*float: right;*/
-  }
+}
+
+#mediaCapture {
+    display: none;
+}
+
+.imageMessage {
+    max-width: 100%;
+}
