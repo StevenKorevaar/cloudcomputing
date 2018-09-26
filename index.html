@@ -27,16 +27,18 @@
 					</li>
 				</ul>
 				<form class="form-inline my-2 my-lg-0">
-					<li class="nav-item user-container">
-            <div hidden id="user-pic"></div>
-            <div hidden id="user-name"></div>
-            <button hidden id="sign-out" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
-              Sign-out
-            </button>
-            <button hidden id="sign-in" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
-              <i class="material-icons">account_circle</i>Sign-in with Google
-            </button>
-					</li>
+					<!--
+					<div class="nav-item user-container">
+						<div hidden id="user-pic"></div>
+						<div hidden id="user-name"></div>
+						<button hidden id="sign-out" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
+							Sign-out
+						</button>
+						<button hidden id="sign-in" class="btn btn-outline-success my-2 my-sm-0">
+							<i class="material-icons"></i>Sign-in with Google
+						</button>
+					</div>
+				-->
 					<!--
 					<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
 					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
@@ -58,11 +60,19 @@
 				<div id="map"></div>
 			</div>			
 		</div>
-		
 
-		<script>
-				
-		</script>
+		<div id="user-container">
+        <div hidden id="user-pic"></div>
+        <div hidden id="user-name"></div>
+        <button hidden id="sign-out" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
+          Sign-out
+        </button>
+        <button hidden id="sign-in" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
+          <i class="material-icons">account_circle</i>Sign-in with Google
+        </button>
+      </div>
+		
+		<link rel="stylesheet" href="styles/main.css">
 
 		<script src="/__/firebase/5.5.0/firebase-app.js"></script>
 		<script src="/__/firebase/5.5.0/firebase-auth.js"></script>
