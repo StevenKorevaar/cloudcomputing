@@ -17,6 +17,11 @@
       // User can write their tokens to the database but not read the list of tokens.
       ".read": false,
       ".write": true
+    },
+	 "users": {
+      // User can read and write.
+      ".read": true,
+      ".write": true
     }
   }
 }
