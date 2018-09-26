@@ -224,7 +224,11 @@ button
 
 #submit {
     display: inline-block;
-    width: 9%;
+    width: calc(100% - 74px);
+}
+
+@media screen and (max-width: 610px) {
+  
 }
 
 #message-form {

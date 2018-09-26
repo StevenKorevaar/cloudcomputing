@@ -65,7 +65,7 @@
 						<input class="mdl-textfield__input" type="text" id="message">
 						<label class="mdl-textfield__label" for="message">Message...</label>
 					</div>
-					<button id="submit" onclick="sendMessage()" disabled type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+					<button id="submit" onclick="" disabled type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
 						Send
 					</button>
 				</form>
@@ -90,6 +90,7 @@
 	<script type="text/javascript" src="socketio.js"></script>
     -->
 	<script>
+		/*
 		function sendMessage() {
 			var message = $('#msg').val();
 			$('#msg').val('');
@@ -124,6 +125,7 @@
 			console.log(m);
 			return (h + ':' + m);
 		}
+		*/
 		</script>
 		
 		<script src="/__/firebase/5.5.0/firebase-app.js"></script>
@@ -134,6 +136,6 @@
 		<script src="/__/firebase/5.5.0/firebase-messaging.js"></script>
 		<script src="/__/firebase/init.js"></script>
 
-		<script src="scripts/main2.js"></script>
+		<script src="scripts/messaging.js"></script>
 	</footer>
 </html>
