@@ -1,68 +1,5 @@
 'use strict';
-
-// Note: This example requires that you consent to location sharing when
-// prompted by your browser. If you see the error "The Geolocation service
-// failed.", it means you probably did not give permission for the browser to
-// locate you.
-var map, infoWindow;
-var curUserPos = {
-  lat: 0,
-  lng: 0
-};
-
-// https://medium.com/@limichelle21/integrating-google-maps-api-for-multiple-locations-a4329517977a
-/*
-var lat = curUserPos.lat + 0.1;
-var lng = curUserPos.lng - 0.1;
-var users = new google.maps.Marker({
-  position: {lat, lng},
-  map: map
-});
-*/
-
-function initMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: -34.397, lng: 150.644},
-    zoom: 14,
-  });
-  infoWindow = new google.maps.InfoWindow;
-
-  // Try HTML5 geolocation.
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      var pos = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      };
-
-      curUserPos = pos;
-
-      infoWindow.setPosition(pos);
-      infoWindow.setContent('Location found.');
-      infoWindow.open(map);
-      map.setCenter(pos);
-
-      console.log(curUserPos.lat+", "+curUserPos.lng);
-
-    }, function() {
-      handleLocationError(true, infoWindow, map.getCenter());
-    });
-  } else {
-    // Browser doesn't support Geolocation
-    handleLocationError(false, infoWindow, map.getCenter());
-  }
-}
-
-//console.log(curUserPos.lat+", "+curUserPos.lng);
-var lat = -37.8699776;
-var lng = 144.9009152;
-function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-  infoWindow.setPosition(pos);
-  infoWindow.setContent(browserHasGeolocation ?
-        'Error: The Geolocation service failed.' :
-        'Error: Your browser doesn\'t support geolocation.');
-  infoWindow.open(map);
-}
+var d = new Date()
 
 function signIn() {
   // Sign in Firebase using popup auth and Google as the identity provider.
@@ -99,6 +36,14 @@ function getUserName() {
   return firebase.auth().currentUser.displayName;
 }
 
+function getUserEmail() {
+  return firebase.auth().currentUser.email;
+}
+
+function getUserID() {
+  return firebase.auth().currentUser.uid;
+}
+
 // Returns true if a user is signed-in.
 function isUserSignedIn() {
   return !!firebase.auth().currentUser;
@@ -132,16 +77,19 @@ function requestNotificationsPermissions() {
   });
 }
 
-function saveCurUserLoc(userLoc) {
+function saveCurUserLoc(user, userLoc) {
   // Add a new message entry to the Firebase Database.
-  var filepath = '/users/' + getUserName();
-  filepath = '/users/' + "steve"
+  var filepath = '/users/' + getUserID();
+  //filepath = '/users/' + "steve"
+  console.log("User: "+getUserID()+" @ T: "+d.getTime());
   return firebase.database().ref(filepath).set({
     name: getUserName(),
-    loc: userLoc
+    loc: userLoc,
+    time: d.getTime()
   }).catch(function(error) {
     console.error('Error writing new message to Firebase Database', error);
   });
+  
 }
 
 // Triggers when the auth state change for instance when the user signs-in or signs-out.
@@ -163,8 +111,8 @@ function authStateObserver(user) {
     // Hide sign-in button.
     signInButtonElement.setAttribute('hidden', 'true');
 
-    //saveCurUserLoc(curUserPos);
-    console.log("USER LOGGED IN AS:"+userName);
+    saveCurUserLoc(user, curUserPos);
+    console.log("USER LOGGED IN AS: "+userName);
     // We save the Firebase Messaging Device token and enable notifications.
     saveMessagingDeviceToken();
   } else { // User is signed out!
@@ -270,3 +218,85 @@ initFirebaseAuth();
 // loadMessages();
 
 
+// Note: This example requires that you consent to location sharing when
+// prompted by your browser. If you see the error "The Geolocation service
+// failed.", it means you probably did not give permission for the browser to
+// locate you.
+var map, infoWindow;
+var curUserPos = {
+  lat: 0,
+  lng: 0
+};
+
+// https://medium.com/@limichelle21/integrating-google-maps-api-for-multiple-locations-a4329517977a
+/*
+var lat = curUserPos.lat + 0.1;
+var lng = curUserPos.lng - 0.1;
+var users = new google.maps.Marker({
+  position: {lat, lng},
+  map: map
+});
+*/
+
+var locations = [
+  ['Los Angeles', 34.052235, -118.243683],
+  ['Santa Monica', 34.024212, -118.496475],
+  ['Redondo Beach', 33.849182, -118.388405],
+  ['Newport Beach', 33.628342, -117.927933],
+  ['Long Beach', 33.770050, -118.193739]
+];
+
+
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: -34.397, lng: 150.644},
+    zoom: 14,
+  });
+  infoWindow = new google.maps.InfoWindow;
+
+  // Try HTML5 geolocation.
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      var pos = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude
+      };
+
+      curUserPos = pos;
+
+      infoWindow.setPosition(pos);
+      infoWindow.setContent('Location found.');
+      infoWindow.open(map);
+      map.setCenter(pos);
+
+      console.log(curUserPos.lat+", "+curUserPos.lng);
+
+      var marker, count;
+      for (count = 0; count < locations.length; count++) {
+        marker = new google.maps.Marker({
+          position: new google.maps.LatLng(locations[count][1], locations[count][2]),
+          map: map,
+          title: locations[count][0]
+        });
+        
+      }
+
+    }, function() {
+      handleLocationError(true, infoWindow, map.getCenter());
+    });
+  } else {
+    // Browser doesn't support Geolocation
+    handleLocationError(false, infoWindow, map.getCenter());
+  }
+}
+
+//console.log(curUserPos.lat+", "+curUserPos.lng);
+var lat = -37.8699776;
+var lng = 144.9009152;
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+  infoWindow.setPosition(pos);
+  infoWindow.setContent(browserHasGeolocation ?
+        'Error: The Geolocation service failed.' :
+        'Error: Your browser doesn\'t support geolocation.');
+  infoWindow.open(map);
+}

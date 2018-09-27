@@ -128,6 +128,7 @@ main, #messages-card {
   justify-content: space-between;
 }
 #user-container {
+  /*
   position: absolute;
   display: flex;
   flex-direction: row;
@@ -137,6 +138,7 @@ main, #messages-card {
   padding-left: 10px;
   justify-content: flex-end;
   padding-right: 10px;
+  */
 }
 #user-container #user-pic {
   top: -3px;
