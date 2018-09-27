@@ -3,7 +3,7 @@ var d = new Date()
 
 function signIn() {
   // Sign in Firebase using popup auth and Google as the identity provider.
-  console.log("here signIn()");
+  // console.log("here signIn()");
   var provider = new firebase.auth.GoogleAuthProvider();
   firebase.auth().signInWithPopup(provider).then(function(user) {
     var user = firebase.auth().currentUser;
@@ -114,6 +114,7 @@ function authStateObserver(user) {
     saveCurUserLoc(user, curUserPos);
     console.log("USER LOGGED IN AS: "+userName);
     // We save the Firebase Messaging Device token and enable notifications.
+    loadUsers();
     saveMessagingDeviceToken();
   } else { // User is signed out!
     // Hide user's profile and sign-out button.
@@ -243,11 +244,14 @@ var contains = function(needle) {
 
 
 var timeout = 10; // Minutes
-
-var locs = [];
-// Loads chat messages history and listens for upcoming ones.
+var usersDrawn = [];
+usersDrawn.push("15tFWc2bX3fpivexNZdwFeU5BfZ2");
+// Loads Current users history and listens for upcoming ones.
 function loadUsers() {
-  // Loads the last 12 messages and listen for new ones.
+  if (!isUserSignedIn()) {
+    return false;
+  }
+
   var callback = function(snap) {
     var data = snap.val();
     // console.log("KEY:" + snap.key);
@@ -256,16 +260,22 @@ function loadUsers() {
 
     var exists = false;
 
-    for (var count = 0; count < locs.length; count++) {
-      if(locs[count].lat == data.loc.lat && locs[count].lng == data.loc.lng) {
+    for (var count = 0; count < usersDrawn.length; count++) {
+      if(usersDrawn[count] == snap.key) {
         exists = true;
         break;
       }
     }
 
+    // console.log("TD: "+(d.getTime() - data.time));
+    // console.log("Timout: "+(timeout*60*1000));
+    
     if( (d.getTime() - data.time) <= (timeout*60*1000) && !exists ) {
-      locs.push(data.loc)
+      usersDrawn.push(snap.key)
       placeMarker(data.loc);
+    }
+    else {
+      console.log("Not Drawn: "+snap.key+" ALREADY DRAWN? "+exists);
     }
     //displayMessage(snap.key, data.name, data.text, data.profilePicUrl, data.imageUrl);
   };
