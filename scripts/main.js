@@ -214,8 +214,65 @@ signInButtonElement.addEventListener('click', signIn);
 // initialize Firebase
 initFirebaseAuth();
 
-// We load currently existing chat messages and listen to new ones.
-// loadMessages();
+var contains = function(needle) {
+  // Per spec, the way to identify NaN is that it is not equal to itself
+  var findNaN = needle !== needle;
+  var indexOf;
+
+  if(!findNaN && typeof Array.prototype.indexOf === 'function') {
+      indexOf = Array.prototype.indexOf;
+  } else {
+      indexOf = function(needle) {
+          var i = -1, index = -1;
+
+          for(i = 0; i < this.length; i++) {
+              var item = this[i];
+
+              if((findNaN && item !== item) || item === needle) {
+                  index = i;
+                  break;
+              }
+          }
+
+          return index;
+      };
+  }
+
+  return indexOf.call(this, needle) > -1;
+};
+
+
+var timeout = 10; // Minutes
+
+var locs = [];
+// Loads chat messages history and listens for upcoming ones.
+function loadUsers() {
+  // Loads the last 12 messages and listen for new ones.
+  var callback = function(snap) {
+    var data = snap.val();
+    // console.log("KEY:" + snap.key);
+    // console.log(data);
+    // console.log(locs);
+
+    var exists = false;
+
+    for (var count = 0; count < locs.length; count++) {
+      if(locs[count].lat == data.loc.lat && locs[count].lng == data.loc.lng) {
+        exists = true;
+        break;
+      }
+    }
+
+    if( (d.getTime() - data.time) <= (timeout*60*1000) && !exists ) {
+      locs.push(data.loc)
+      placeMarker(data.loc);
+    }
+    //displayMessage(snap.key, data.name, data.text, data.profilePicUrl, data.imageUrl);
+  };
+
+  firebase.database().ref('/users/').limitToLast(100).on('child_added', callback);
+  firebase.database().ref('/users/').limitToLast(100).on('child_changed', callback);
+}
 
 
 // Note: This example requires that you consent to location sharing when
@@ -229,22 +286,6 @@ var curUserPos = {
 };
 
 // https://medium.com/@limichelle21/integrating-google-maps-api-for-multiple-locations-a4329517977a
-/*
-var lat = curUserPos.lat + 0.1;
-var lng = curUserPos.lng - 0.1;
-var users = new google.maps.Marker({
-  position: {lat, lng},
-  map: map
-});
-*/
-
-var locations = [
-  ['Los Angeles', 34.052235, -118.243683],
-  ['Santa Monica', 34.024212, -118.496475],
-  ['Redondo Beach', 33.849182, -118.388405],
-  ['Newport Beach', 33.628342, -117.927933],
-  ['Long Beach', 33.770050, -118.193739]
-];
 
 
 function initMap() {
@@ -269,17 +310,8 @@ function initMap() {
       infoWindow.open(map);
       map.setCenter(pos);
 
-      console.log(curUserPos.lat+", "+curUserPos.lng);
-
-      var marker, count;
-      for (count = 0; count < locations.length; count++) {
-        marker = new google.maps.Marker({
-          position: new google.maps.LatLng(locations[count][1], locations[count][2]),
-          map: map,
-          title: locations[count][0]
-        });
-        
-      }
+      // console.log(curUserPos.lat+", "+curUserPos.lng);
+      loadUsers();
 
     }, function() {
       handleLocationError(true, infoWindow, map.getCenter());
@@ -290,9 +322,13 @@ function initMap() {
   }
 }
 
-//console.log(curUserPos.lat+", "+curUserPos.lng);
-var lat = -37.8699776;
-var lng = 144.9009152;
+function placeMarker(location) {
+  var marker = new google.maps.Marker({
+      position: location, 
+      map: map
+  });
+}
+
 function handleLocationError(browserHasGeolocation, infoWindow, pos) {
   infoWindow.setPosition(pos);
   infoWindow.setContent(browserHasGeolocation ?
