@@ -245,7 +245,7 @@ var contains = function(needle) {
 
 var timeout = 10; // Minutes
 var usersDrawn = [];
-usersDrawn.push("15tFWc2bX3fpivexNZdwFeU5BfZ2");
+
 // Loads Current users history and listens for upcoming ones.
 function loadUsers() {
   if (!isUserSignedIn()) {
@@ -275,7 +275,7 @@ function loadUsers() {
       placeMarker(data.loc);
     }
     else {
-      console.log("Not Drawn: "+snap.key+" ALREADY DRAWN? "+exists);
+      //console.log("Not Drawn: "+snap.key+" ALREADY DRAWN? "+exists);
     }
     //displayMessage(snap.key, data.name, data.text, data.profilePicUrl, data.imageUrl);
   };
