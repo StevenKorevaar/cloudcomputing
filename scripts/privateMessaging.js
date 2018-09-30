@@ -120,6 +120,11 @@ function loadMessages() {
   firebase.database().ref(messagesURL).limitToLast(10).on('child_changed', callback);
 }
 
+// TODO 
+// convert user IDs to Tokens
+// https://firebase.google.com/docs/auth/web/manage-users#get_a_users_profile
+
+
 var chatID = "";
 var chatExists = false;
 async function checkExistingChat(u1, u2) {

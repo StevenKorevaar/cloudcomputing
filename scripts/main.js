@@ -52,7 +52,7 @@ function chatWithUser(otherUser) {
 function saveChatWith(otherUser) {
   // Add a new message entry to the Firebase Database.
   var filepath = '/users/' + getUserID();
-  console.log("OTHERUSER: "+otherUser);
+  //console.log("OTHERUSER: "+otherUser);
   return firebase.database().ref(filepath).update({
     name: getUserName(),
     loc: curUserPos,
