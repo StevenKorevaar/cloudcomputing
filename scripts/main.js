@@ -1,53 +1,5 @@
 'use strict';
-var d = new Date()
-
-function signIn() {
-  // Sign in Firebase using popup auth and Google as the identity provider.
-  // console.log("here signIn()");
-  var provider = new firebase.auth.GoogleAuthProvider();
-  firebase.auth().signInWithPopup(provider).then(function(user) {
-    var user = firebase.auth().currentUser;
-    console.log(user); // Optional
-  }, function(error) {
-    // Handle Errors here.
-    var errorCode = error.code;
-    var errorMessage = error.message;
-  });
-}
-
-function signOut() {
-  // Sign out of Firebase.
-  firebase.auth().signOut();
-}
-
-// Initiate firebase auth.
-function initFirebaseAuth() {
-  // Listen to auth state changes.
-  firebase.auth().onAuthStateChanged(authStateObserver);
-}
-
-// Returns the signed-in user's profile Pic URL.
-function getProfilePicUrl() {
-  return firebase.auth().currentUser.photoURL || '/images/profile_placeholder.png';
-}
-
-// Returns the signed-in user's display name.
-function getUserName() {
-  return firebase.auth().currentUser.displayName;
-}
-
-function getUserEmail() {
-  return firebase.auth().currentUser.email;
-}
-
-function getUserID() {
-  return firebase.auth().currentUser.uid;
-}
-
-// Returns true if a user is signed-in.
-function isUserSignedIn() {
-  return !!firebase.auth().currentUser;
-}
+var d = new Date();
 
 // Saves the messaging device token to the datastore.
 function saveMessagingDeviceToken() {
@@ -82,10 +34,30 @@ function saveCurUserLoc(user, userLoc) {
   var filepath = '/users/' + getUserID();
   //filepath = '/users/' + "steve"
   console.log("User: "+getUserID()+" @ T: "+d.getTime());
-  return firebase.database().ref(filepath).set({
+  return firebase.database().ref(filepath).update({
     name: getUserName(),
     loc: userLoc,
     time: d.getTime()
+  }).catch(function(error) {
+    console.error('Error writing new message to Firebase Database', error);
+  });
+  
+}
+
+function chatWithUser(otherUser) {
+  saveChatWith(otherUser);
+  window.location.href = "/privateChat.html";
+}
+
+function saveChatWith(otherUser) {
+  // Add a new message entry to the Firebase Database.
+  var filepath = '/users/' + getUserID();
+  console.log("OTHERUSER: "+otherUser);
+  return firebase.database().ref(filepath).update({
+    name: getUserName(),
+    loc: curUserPos,
+    time: d.getTime(),
+    lastChat: otherUser
   }).catch(function(error) {
     console.error('Error writing new message to Firebase Database', error);
   });
@@ -215,34 +187,6 @@ signInButtonElement.addEventListener('click', signIn);
 // initialize Firebase
 initFirebaseAuth();
 
-var contains = function(needle) {
-  // Per spec, the way to identify NaN is that it is not equal to itself
-  var findNaN = needle !== needle;
-  var indexOf;
-
-  if(!findNaN && typeof Array.prototype.indexOf === 'function') {
-      indexOf = Array.prototype.indexOf;
-  } else {
-      indexOf = function(needle) {
-          var i = -1, index = -1;
-
-          for(i = 0; i < this.length; i++) {
-              var item = this[i];
-
-              if((findNaN && item !== item) || item === needle) {
-                  index = i;
-                  break;
-              }
-          }
-
-          return index;
-      };
-  }
-
-  return indexOf.call(this, needle) > -1;
-};
-
-
 var timeout = 10; // Minutes
 var usersDrawn = [];
 
@@ -272,7 +216,7 @@ function loadUsers() {
     
     if( (d.getTime() - data.time) <= (timeout*60*1000) && !exists ) {
       usersDrawn.push(snap.key)
-      placeMarker(data);
+      placeMarker(data, snap.key);
     }
     else {
       //console.log("Not Drawn: "+snap.key+" ALREADY DRAWN? "+exists);
@@ -334,10 +278,10 @@ function initMap() {
   }
 }
 
-function placeMarker(data) {
+function placeMarker(data, uID) {
 
   var contentString = "<div id='content'>"+
-    "<a href='/privateChat.html' class='nav-link btn btn-outline-success'>"
+    "<a href=\"#\" onclick=\"chatWithUser(\'"+uID+"\')\" class='nav-link btn btn-outline-success'>"+
     "Chat with: "+data.name+
     "</a>"+
     "</div>";

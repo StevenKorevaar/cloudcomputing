@@ -40,8 +40,8 @@ function loadMessages() {
     displayMessage(snap.key, data.name, data.text, data.profilePicUrl, data.imageUrl);
   };
 
-  firebase.database().ref('/messages/').limitToLast(100).on('child_added', callback);
-  firebase.database().ref('/messages/').limitToLast(100).on('child_changed', callback);
+  firebase.database().ref('/messages/').limitToLast(10).on('child_added', callback);
+  firebase.database().ref('/messages/').limitToLast(10).on('child_changed', callback);
 }
 
 // Saves a new message on the Firebase DB.

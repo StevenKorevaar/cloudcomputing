@@ -1,0 +1,32 @@
+[debug] [2018-09-30T08:19:52.181Z] ----------------------------------------------------------------------
+[debug] [2018-09-30T08:19:52.184Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\WaterISThirsty\AppData\Roaming\npm\node_modules\firebase-tools\bin\firebase serve
+[debug] [2018-09-30T08:19:52.184Z] CLI Version:   4.2.1
+[debug] [2018-09-30T08:19:52.184Z] Platform:      win32
+[debug] [2018-09-30T08:19:52.184Z] Node Version:  v9.10.1
+[debug] [2018-09-30T08:19:52.184Z] Time:          Sun Sep 30 2018 18:19:52 GMT+1000 (AUS Eastern Standard Time)
+[debug] [2018-09-30T08:19:52.185Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2018-09-30T08:19:52.197Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2018-09-30T08:19:52.198Z] > authorizing via signed-in user
+[debug] [2018-09-30T08:19:52.200Z] >>> HTTP REQUEST GET https://admin.firebase.com/v1/projects/cc-assignment2-sonar-msg  
+ 
+[debug] [2018-09-30T08:19:53.366Z] <<< HTTP RESPONSE 200
+[debug] [2018-09-30T08:19:53.367Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/cc-assignment2-sonar-msg  
+ 
+[debug] [2018-09-30T08:19:54.784Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from 'C:\Users\WaterISThirsty\Documents\University Stuff\Year 4\Semester 2\Cloud Computing\Assignment 2\cloudcomputing'...
+[info] 
+[info] i  functions: Preparing to emulate functions.
+[debug] [2018-09-30T08:19:59.966Z] Fetching environment
+[debug] [2018-09-30T08:19:59.978Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/706079279024:getServerAppConfig  
+ 
+[debug] [2018-09-30T08:19:59.978Z] >>> HTTP REQUEST GET https://mobilesdk-pa.googleapis.com/v1/projects/706079279024/clients/_:getWebAppConfig  
+ 
+[debug] [2018-09-30T08:20:00.595Z] <<< HTTP RESPONSE 200
+[debug] [2018-09-30T08:20:00.595Z] Starting @google-cloud/functions-emulator
+[debug] [2018-09-30T08:20:00.974Z] <<< HTTP RESPONSE 200
+[info] i  hosting[cc-assignment2-sonar-msg]: Serving hosting files from: ./
+[info] +  hosting[cc-assignment2-sonar-msg]: Local server: http://localhost:5000
+[debug] [2018-09-30T08:20:04.706Z] Parsing function triggers
+[info] i  functions: No HTTPS functions found. Use firebase functions:shell if you would like to emulate other types of functions.

@@ -18,7 +18,12 @@
       ".read": false,
       ".write": true
     },
-	 "users": {
+	  "users": {
+      // User can read and write.
+      ".read": true,
+      ".write": true
+    },
+    "chats": {
       // User can read and write.
       ".read": true,
       ".write": true
