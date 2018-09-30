@@ -187,7 +187,7 @@ signInButtonElement.addEventListener('click', signIn);
 // initialize Firebase
 initFirebaseAuth();
 
-var timeout = 10; // Minutes
+var timeout = 60; // Minutes
 var usersDrawn = [];
 
 // Loads Current users history and listens for upcoming ones.
@@ -226,8 +226,8 @@ function loadUsers() {
 
   // TODO 
   // https://firebase.google.com/docs/reference/node/firebase.database.Query
-  firebase.database().ref('/users/').limitToLast(100).on('child_added', callback);
-  firebase.database().ref('/users/').limitToLast(100).on('child_changed', callback);
+  firebase.database().ref('/users/').on('child_added', callback);
+  firebase.database().ref('/users/').on('child_changed', callback);
 }
 
 

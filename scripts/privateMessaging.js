@@ -14,7 +14,7 @@ function saveMessage(messageText) {
   }).catch(function(error) {
     console.error('Error writing new message to Firebase Database', error);
   });
-  console.log(key);
+  //console.log(key);
   return ref;
 }
 
@@ -121,37 +121,45 @@ function loadMessages() {
 }
 
 var chatID = "";
-var chatExists = -1;
-function checkExistingChat(u1, u2) {
+var chatExists = false;
+async function checkExistingChat(u1, u2) {
 
-  var ref = firebase.database().ref("/chats/");
+  let chats = await firebase.database().ref('/chats/').once('value', snapshot => {
+    var chats = snapshot.val();
+    //console.log('chats',chats);
+    //console.log("before, chats.length: "+chats.length);
 
-  ref.on("value", function(snap) {
-    //console.log(snap.key);
-    var data = snap.val();
-    var du1 = data.u1;
-    var du2 = data.u2;
+    for (var chat in chats) { 
+      if (chats.hasOwnProperty(chat)) {
+        //console.log(chat);
+        var du1 = chats[chat].u1;
+        var du2 = chats[chat].u2;
 
-    if( (u1 == du1 || u1 == du2) && (u2 == du1 || u2 == du2) ) {
-      chatID = snap.key;
-      chatExists = true;
+        if( (u1 == du1 || u1 == du2) && (u2 == du1 || u2 == du2) ) {
+          chatID = chat;
+          chatExists = true;
 
-      messagesURL = "/chats/"+chatID+"/messages/";
-      console.log("FOUND: "+ messagesURL);
-      loadMessages();
-      return true;
+          messagesURL = "/chats/"+chatID+"/messages/";
+          console.log("FOUND CHAT: "+ messagesURL);
+          loadMessages();
+          return true;
+        }
+      }
     }
 
+    //console.log("after loop");
   });
+  //console.log("after function");
+  createChat(u1,u2);
+  return false;
 }
 
+
 function createChat(u1, u2) {
-  if( chatExists == true ) {
-    messagesURL = "/chats/"+chatID+"/messages/";
-  }
-  else {
+  if(!chatExists) {
     var ref = firebase.database().ref('/chats/').push();
     var chatID = ref.key;
+    console.log("created new chat: "+chatID)
     messagesURL = "/chats/"+chatID+"/messages/";
     
     ref.set({
@@ -161,6 +169,7 @@ function createChat(u1, u2) {
       console.error('Error Creating new Chat in Firebase Database', error);
     });
     console.log(chatID);
+    loadMessages();
   }
 }
 
@@ -181,7 +190,10 @@ function loadUser() {
       var u2 = snap2.key;
       users = {u1: u1, u2: u2};
 
-      createChat(u1,u2);
+      var check = checkExistingChat(u1,u2);
+      if(!check) {
+        createChat(u1,u2);
+      }
     });
 
   });
