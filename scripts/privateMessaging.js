@@ -1,18 +1,9 @@
 'use strict';
-var d = new Date()
 
 function signIn() {
   // Sign in Firebase using popup auth and Google as the identity provider.
-  // console.log("here signIn()");
   var provider = new firebase.auth.GoogleAuthProvider();
-  firebase.auth().signInWithPopup(provider).then(function(user) {
-    var user = firebase.auth().currentUser;
-    console.log(user); // Optional
-  }, function(error) {
-    // Handle Errors here.
-    var errorCode = error.code;
-    var errorMessage = error.message;
-  });
+  firebase.auth().signInWithPopup(provider);
 }
 
 function signOut() {
@@ -36,24 +27,66 @@ function getUserName() {
   return firebase.auth().currentUser.displayName;
 }
 
-function getUserEmail() {
-  return firebase.auth().currentUser.email;
-}
-
-function getUserID() {
-  return firebase.auth().currentUser.uid;
-}
-
 // Returns true if a user is signed-in.
 function isUserSignedIn() {
   return !!firebase.auth().currentUser;
+}
+
+// Loads chat messages history and listens for upcoming ones.
+function loadMessages() {
+  // Loads the last 12 messages and listen for new ones.
+  var callback = function(snap) {
+    var data = snap.val();
+    displayMessage(snap.key, data.name, data.text, data.profilePicUrl, data.imageUrl);
+  };
+
+  firebase.database().ref('/messages/').limitToLast(100).on('child_added', callback);
+  firebase.database().ref('/messages/').limitToLast(100).on('child_changed', callback);
+}
+
+// Saves a new message on the Firebase DB.
+function saveMessage(messageText) {
+  // Add a new message entry to the Firebase Database.
+  return firebase.database().ref('/messages/').push({
+    name: getUserName(),
+    text: messageText,
+    profilePicUrl: getProfilePicUrl()
+  }).catch(function(error) {
+    console.error('Error writing new message to Firebase Database', error);
+  });
+}
+
+// Saves a new message containing an image in Firebase.
+// This first saves the image in Firebase storage.
+function saveImageMessage(file) {
+  // 1 - We add a message with a loading icon that will get updated with the shared image.
+  firebase.database().ref('/messages/').push({
+    name: getUserName(),
+    imageUrl: LOADING_IMAGE_URL,
+    profilePicUrl: getProfilePicUrl()
+  }).then(function(messageRef) {
+    // 2 - Upload the image to Cloud Storage.
+    var filePath = firebase.auth().currentUser.uid + '/' + messageRef.key + '/' + file.name;
+    return firebase.storage().ref(filePath).put(file).then(function(fileSnapshot) {
+      // 3 - Generate a public URL for the file.
+      return fileSnapshot.ref.getDownloadURL().then((url) => {
+        // 4 - Update the chat message placeholder with the image's URL.
+        return messageRef.update({
+          imageUrl: url,
+          storageUri: fileSnapshot.metadata.fullPath
+        });
+      });
+    });
+  }).catch(function(error) {
+    console.error('There was an error uploading a file to Cloud Storage:', error);
+  });
 }
 
 // Saves the messaging device token to the datastore.
 function saveMessagingDeviceToken() {
   firebase.messaging().getToken().then(function(currentToken) {
     if (currentToken) {
-      // console.log('Got FCM device token:', currentToken);
+      console.log('Got FCM device token:', currentToken);
       // Saving the Device Token to the datastore.
       firebase.database().ref('/fcmTokens').child(currentToken)
           .set(firebase.auth().currentUser.uid);
@@ -77,19 +110,40 @@ function requestNotificationsPermissions() {
   });
 }
 
-function saveCurUserLoc(user, userLoc) {
-  // Add a new message entry to the Firebase Database.
-  var filepath = '/users/' + getUserID();
-  //filepath = '/users/' + "steve"
-  console.log("User: "+getUserID()+" @ T: "+d.getTime());
-  return firebase.database().ref(filepath).set({
-    name: getUserName(),
-    loc: userLoc,
-    time: d.getTime()
-  }).catch(function(error) {
-    console.error('Error writing new message to Firebase Database', error);
-  });
-  
+// Triggered when a file is selected via the media picker.
+function onMediaFileSelected(event) {
+  event.preventDefault();
+  var file = event.target.files[0];
+
+  // Clear the selection in the file picker input.
+  imageFormElement.reset();
+
+  // Check if the file is an image.
+  if (!file.type.match('image.*')) {
+    var data = {
+      message: 'You can only share images',
+      timeout: 2000
+    };
+    signInSnackbarElement.MaterialSnackbar.showSnackbar(data);
+    return;
+  }
+  // Check if the user is signed-in
+  if (checkSignedInWithMessage()) {
+    saveImageMessage(file);
+  }
+}
+
+// Triggered when the send new message form is submitted.
+function onMessageFormSubmit(e) {
+  e.preventDefault();
+  // Check that the user entered a message and is signed in.
+  if (messageInputElement.value && checkSignedInWithMessage()) {
+    saveMessage(messageInputElement.value).then(function() {
+      // Clear message text field and re-enable the SEND button.
+      resetMaterialTextfield(messageInputElement);
+      toggleButton();
+    });
+  }
 }
 
 // Triggers when the auth state change for instance when the user signs-in or signs-out.
@@ -111,14 +165,10 @@ function authStateObserver(user) {
     // Hide sign-in button.
     signInButtonElement.setAttribute('hidden', 'true');
 
-    saveCurUserLoc(user, curUserPos);
-    console.log("USER LOGGED IN AS: "+userName);
     // We save the Firebase Messaging Device token and enable notifications.
-    loadUsers();
     saveMessagingDeviceToken();
   } else { // User is signed out!
     // Hide user's profile and sign-out button.
-    console.log("USER NOT LOGGED IN");
     userNameElement.setAttribute('hidden', 'true');
     userPicElement.setAttribute('hidden', 'true');
     signOutButtonElement.setAttribute('hidden', 'true');
@@ -128,7 +178,6 @@ function authStateObserver(user) {
   }
 }
 
-/*
 // Returns true if user is signed-in. Otherwise false and displays a message.
 function checkSignedInWithMessage() {
   // Return true if the user is signed in Firebase
@@ -145,13 +194,22 @@ function checkSignedInWithMessage() {
   return false;
 }
 
+// Resets the given MaterialTextField.
+function resetMaterialTextfield(element) {
+  element.value = '';
+  element.parentNode.MaterialTextfield.boundUpdateClassesHandler();
+}
+
 // Template for messages.
 var MESSAGE_TEMPLATE =
-    '<div class="message-container">' +
+    '<div class="message-container messageBox">' +
       '<div class="spacing"><div class="pic"></div></div>' +
       '<div class="message"></div>' +
       '<div class="name"></div>' +
     '</div>';
+
+// A loading image URL.
+var LOADING_IMAGE_URL = 'https://www.google.com/images/spin-32.gif?a';
 
 // Displays a Message in the UI.
 function displayMessage(key, name, text, picUrl, imageUrl) {
@@ -175,6 +233,7 @@ function displayMessage(key, name, text, picUrl, imageUrl) {
     messageElement.innerHTML = messageElement.innerHTML.replace(/\n/g, '<br>');
   } else if (imageUrl) { // If the message is an image.
     var image = document.createElement('img');
+    image.classList.add("imageMessage");
     image.addEventListener('load', function() {
       messageListElement.scrollTop = messageListElement.scrollHeight;
     });
@@ -187,7 +246,16 @@ function displayMessage(key, name, text, picUrl, imageUrl) {
   messageListElement.scrollTop = messageListElement.scrollHeight;
   messageInputElement.focus();
 }
-*/
+
+// Enables or disables the submit button depending on the values of the input
+// fields.
+function toggleButton() {
+  if (messageInputElement.value) {
+    submitButtonElement.removeAttribute('disabled');
+  } else {
+    submitButtonElement.setAttribute('disabled', 'true');
+  }
+}
 
 // Checks that the Firebase SDK has been correctly setup and configured.
 function checkSetup() {
@@ -202,165 +270,37 @@ function checkSetup() {
 checkSetup();
 
 // Shortcuts to DOM Elements.
+var messageListElement = document.getElementById('messages');
+var messageFormElement = document.getElementById('message-form');
+var messageInputElement = document.getElementById('message');
+var submitButtonElement = document.getElementById('submit');
+var imageButtonElement = document.getElementById('submitImage');
+var imageFormElement = document.getElementById('image-form');
+var mediaCaptureElement = document.getElementById('mediaCapture');
 var userPicElement = document.getElementById('user-pic');
 var userNameElement = document.getElementById('user-name');
 var signInButtonElement = document.getElementById('sign-in');
 var signOutButtonElement = document.getElementById('sign-out');
+var signInSnackbarElement = document.getElementById('must-signin-snackbar');
 
 // Saves message on form submit.
-// messageFormElement.addEventListener('submit', onMessageFormSubmit);
-signOutButtonElement.addEventListener('click', signOut);
-signInButtonElement.addEventListener('click', signIn);
+messageFormElement.addEventListener('submit', onMessageFormSubmit);
+//signOutButtonElement.addEventListener('click', signOut);
+//signInButtonElement.addEventListener('click', signIn);
+
+// Toggle for the button.
+messageInputElement.addEventListener('keyup', toggleButton);
+messageInputElement.addEventListener('change', toggleButton);
+
+// Events for image upload.
+imageButtonElement.addEventListener('click', function(e) {
+  e.preventDefault();
+  mediaCaptureElement.click();
+});
+mediaCaptureElement.addEventListener('change', onMediaFileSelected);
 
 // initialize Firebase
 initFirebaseAuth();
 
-var contains = function(needle) {
-  // Per spec, the way to identify NaN is that it is not equal to itself
-  var findNaN = needle !== needle;
-  var indexOf;
-
-  if(!findNaN && typeof Array.prototype.indexOf === 'function') {
-      indexOf = Array.prototype.indexOf;
-  } else {
-      indexOf = function(needle) {
-          var i = -1, index = -1;
-
-          for(i = 0; i < this.length; i++) {
-              var item = this[i];
-
-              if((findNaN && item !== item) || item === needle) {
-                  index = i;
-                  break;
-              }
-          }
-
-          return index;
-      };
-  }
-
-  return indexOf.call(this, needle) > -1;
-};
-
-
-var timeout = 10; // Minutes
-var usersDrawn = [];
-
-// Loads Current users history and listens for upcoming ones.
-function loadUsers() {
-  if (!isUserSignedIn()) {
-    return false;
-  }
-
-  var callback = function(snap) {
-    var data = snap.val();
-    // console.log("KEY:" + snap.key);
-    // console.log(data);
-    // console.log(locs);
-
-    var exists = false;
-
-    for (var count = 0; count < usersDrawn.length; count++) {
-      if(usersDrawn[count] == snap.key) {
-        exists = true;
-        break;
-      }
-    }
-
-    // console.log("TD: "+(d.getTime() - data.time));
-    // console.log("Timout: "+(timeout*60*1000));
-    
-    if( (d.getTime() - data.time) <= (timeout*60*1000) && !exists ) {
-      usersDrawn.push(snap.key)
-      placeMarker(data);
-    }
-    else {
-      //console.log("Not Drawn: "+snap.key+" ALREADY DRAWN? "+exists);
-    }
-    //displayMessage(snap.key, data.name, data.text, data.profilePicUrl, data.imageUrl);
-  };
-
-  // TODO 
-  // https://firebase.google.com/docs/reference/node/firebase.database.Query
-  firebase.database().ref('/users/').limitToLast(100).on('child_added', callback);
-  firebase.database().ref('/users/').limitToLast(100).on('child_changed', callback);
-}
-
-
-// Note: This example requires that you consent to location sharing when
-// prompted by your browser. If you see the error "The Geolocation service
-// failed.", it means you probably did not give permission for the browser to
-// locate you.
-var map, infoWindow;
-var curUserPos = {
-  lat: 0,
-  lng: 0
-};
-
-// https://medium.com/@limichelle21/integrating-google-maps-api-for-multiple-locations-a4329517977a
-
-
-function initMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
-    center: {lat: -34.397, lng: 150.644},
-    zoom: 14,
-  });
-  infoWindow = new google.maps.InfoWindow;
-
-  // Try HTML5 geolocation.
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      var pos = {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      };
-
-      curUserPos = pos;
-
-      infoWindow.setPosition(pos);
-      infoWindow.setContent('Location found.');
-      infoWindow.open(map);
-      map.setCenter(pos);
-
-      // console.log(curUserPos.lat+", "+curUserPos.lng);
-      loadUsers();
-
-    }, function() {
-      handleLocationError(true, infoWindow, map.getCenter());
-    });
-  } else {
-    // Browser doesn't support Geolocation
-    handleLocationError(false, infoWindow, map.getCenter());
-  }
-}
-
-function placeMarker(data) {
-
-  var contentString = "<div id='content'>"+
-    "<a href='/privateChat.html' class='nav-link btn btn-outline-success'>"
-    "Chat with: "+data.name+
-    "</a>"+
-    "</div>";
-
-  var infowindow = new google.maps.InfoWindow({
-    content: contentString
-  });
-
-  var marker = new google.maps.Marker({
-      position: data.loc, 
-      map: map,
-      title: data.name
-  });
-
-  marker.addListener('click', function() {
-    infowindow.open(map, marker);
-  });
-}
-
-function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-  infoWindow.setPosition(pos);
-  infoWindow.setContent(browserHasGeolocation ?
-        'Error: The Geolocation service failed.' :
-        'Error: Your browser doesn\'t support geolocation.');
-  infoWindow.open(map);
-}
+// We load currently existing chat messages and listen to new ones.
+loadMessages();

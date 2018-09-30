@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+		<link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.deep_purple-pink.min.css">
+		<link href='https://fonts.googleapis.com/css?family=Roboto:400,500,700' rel='stylesheet' type='text/css'>
+	  	<link rel="stylesheet" href="css/chatStyle.css">
+	<title>Sonar Messaging</title>
+</head>
+<body>
+	<!-- Always shows a header, even in smaller screens. -->
+	<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header has-drawer mdl-layout--fixed-drawer">
+		<header class="mdl-layout__header">
+				<div class="mdl-layout__header-row" >
+						<!-- Title -->
+						<span class="mdl-layout-title ">Chat with 
+							<b id="OtherPersonsName">
+								Placeholder
+							</b>
+						</span>
+				</div>
+		</header>
+
+		<div class="mdl-layout__drawer">
+			<span class="mdl-layout-title">Conversations</span>
+			<ul class="navbar-nav mr-auto">
+				
+				<li id="user-container" style="display: none;">
+					<div hidden id="user-pic"></div>
+					<div hidden id="user-name"></div>
+					<button hidden id="sign-out" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
+						Sign-out
+					</button>
+					<button hidden id="sign-in" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
+						<i class="material-icons">account_circle</i>Sign-in with Google
+					</button>
+				</li>
+				</br>
+				<li class="nav-item active">
+					<a class="nav-link" href="/">Home Page</a>
+				</li>
+			</ul>
+		</div>
+
+		<main class="mdl-layout__content">
+			<div class="messages-card room-messages">
+				<!--
+				<div class="messageBox sent">
+					<p class="sender">Steven:</p>
+					<div class="messageText message sent">
+						Hello There!
+					</div>
+					<div class="messageTime messageText">14:57</div>
+				</div>
+				-->
+
+				<div id="messages">
+					<span id="message-filler"></span>
+				</div>
+				
+				<div id="console"></div>
+			</div>
+			<div class="response">	
+				<form id="message-form" action="#">
+					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="MessageTextAndLabel">
+						<input class="mdl-textfield__input" type="text" id="message">
+						<label class="mdl-textfield__label" for="message">Message...</label>
+					</div>
+					<button id="submit" onclick="" disabled type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+						Send
+					</button>
+				</form>
+
+				<form id="image-form" action="#">
+					<input id="mediaCapture" type="file" accept="image/*" capture="camera">
+					<button id="submitImage" title="Add an image" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--amber-400 mdl-color-text--white">
+						<i class="material-icons">image</i>
+					</button>
+				</form>
+
+			</div>
+
+			<div id="must-signin-snackbar" class="mdl-js-snackbar mdl-snackbar">
+				<div class="mdl-snackbar__text"></div>
+				<button class="mdl-snackbar__action" type="button"></button>
+			  </div>
+		</main>
+		
+	</div>    
+</body>
+
+<footer>
+	<script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
+	<!--
+	<script type="text/javascript" src="socketio.js"></script>
+    -->
+	<script>
+		/*
+		function sendMessage() {
+			var message = $('#msg').val();
+			$('#msg').val('');
+    	    
+			var sentOrReceieved = "sent";
+			var color = "mdl-color--primary";
+			var userName = "Steven";
+			var time = timeNow();
+
+    	    var element = $("<div class=\"messageBox "+sentOrReceieved+"\">"
+            	+	"<p class=\"sender\">"
+            	+		userName +":"
+            	+	"</p>"
+            	+	"<div class=\"message  "+sentOrReceieved+" "+color+" messageText\">"
+            	+		message
+            	+	"</div>"
+				+	"<div class=\"messageTime messageText\">"+time+"</div>"
+            	+"</div>");
+    	    
+    	    $('.room-messages').append(element);
+    			
+            var height = $('.room-messages')[0].scrollHeight;
+            $('.room-messages').scrollTop(height);
+
+		}
+
+		function timeNow() {
+			var d = new Date(),
+				h = (d.getHours()<10?'0':'') + d.getHours(),
+				m = (d.getMinutes()<10?'0':'') + d.getMinutes();
+			console.log(h);
+			console.log(m);
+			return (h + ':' + m);
+		}
+		*/
+		</script>
+		
+		<script src="/__/firebase/5.5.0/firebase-app.js"></script>
+		<script src="/__/firebase/5.5.0/firebase-auth.js"></script>
+		<script src="/__/firebase/5.5.0/firebase-database.js"></script>
+		<script src="/__/firebase/5.5.0/firebase-storage.js"></script>
+		<script src="/__/firebase/5.5.0/firebase-firestore.js"></script>
+		<script src="/__/firebase/5.5.0/firebase-messaging.js"></script>
+		<script src="/__/firebase/init.js"></script>
+
+		<script src="scripts/privateMessaging.js"></script>
+	</footer>
+</html>
