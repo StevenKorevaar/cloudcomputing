@@ -1,5 +1,6 @@
 'use strict';
 var messagesURL = messagesURL;
+var d = new Date();
 
 // Saves a new message on the Firebase DB.
 function saveMessage(messageText) {
@@ -120,14 +121,70 @@ function loadMessages() {
   firebase.database().ref(messagesURL).limitToLast(10).on('child_changed', callback);
 }
 
-// TODO 
-// convert user IDs to Tokens
-// https://firebase.google.com/docs/auth/web/manage-users#get_a_users_profile
 
+function loadConversations() {
+  // Loads the last 12 messages and listen for new ones.
+  var callback = function(snap) {
+    var data = snap.val();
+    //console.log(data);
+    var curUserEmail = getUserEmail();
+    var toDisplayEmail = "";
+    var toDisplayName = "";
+
+    if(data.u1 == curUserEmail) {
+      toDisplayEmail = data.u2;
+      toDisplayName = data.n2;
+    }
+    else {
+      toDisplayEmail = data.u1;
+      toDisplayName = data.n1;
+    }
+
+    displayChat(snap.key, toDisplayName, toDisplayEmail);
+  };
+
+  firebase.database().ref("/chats/").on('child_added', callback);
+  firebase.database().ref("/chats/").on('child_changed', callback);
+}
+
+function displayChat(key, user, email) {
+  if(document.getElementById(email) != null) {
+    return false;
+  }
+  var node = document.createElement("a");
+
+  var textnode = document.createTextNode(user+" - "+email);
+  node.appendChild(textnode);
+
+  node.setAttribute("class", "mdl-navigation__link");
+  node.setAttribute("href", "#");
+  node.setAttribute("onclick", "chatWithUser('"+email+"')");
+  node.setAttribute("id", email);
+
+  document.getElementById("ConversationsList").appendChild(node);
+}
+
+function chatWithUser(otherUser) {
+  saveChatWith(otherUser);
+  window.location.href = "/privateChat.html";
+}
+
+function saveChatWith(otherUser) {
+  // Add a new message entry to the Firebase Database.
+  var filepath = '/users/' + getUserID();
+  //console.log("OTHERUSER: "+otherUser);
+  return firebase.database().ref(filepath).update({
+    time: d.getTime(),
+    lastChat: otherUser
+  }).catch(function(error) {
+    console.error('Error writing new message to Firebase Database', error);
+  });
+  
+}
 
 var chatID = "";
 var chatExists = false;
-async function checkExistingChat(u1, u2) {
+async function checkExistingChat(u1, u2, n1, n2) {
 
   let chats = await firebase.database().ref('/chats/').once('value', snapshot => {
     var chats = snapshot.val();
@@ -155,12 +212,12 @@ async function checkExistingChat(u1, u2) {
     //console.log("after loop");
   });
   //console.log("after function");
-  createChat(u1,u2);
+  createChat(u1, u2, n1, n2);
   return false;
 }
 
 
-function createChat(u1, u2) {
+function createChat(u1, u2, n1, n2) {
   if(!chatExists) {
     var ref = firebase.database().ref('/chats/').push();
     var chatID = ref.key;
@@ -171,7 +228,9 @@ function createChat(u1, u2) {
 
     ref.set({
       u1: u1,
-      u2: u2
+      u2: u2,
+      n1: n1,
+      n2: n2
     }).catch(function(error) {
       console.error('Error Creating new Chat in Firebase Database', error);
     });
@@ -190,7 +249,9 @@ async function loadUser() {
     //console.log(data);
     //var u1 = snap.key;
     var u1 = data.email;
+    var n1 = data.name;
     var otherUseremail = data.lastChat;
+
     //console.log("U1: "+u1);
 
     var ref2 = firebase.database().ref("/users/");
@@ -205,12 +266,13 @@ async function loadUser() {
       for (var user in snap2.val()) {
         if(data2[user].email = otherUseremail) {
           var u2 = data2[user].email; 
+          var n2 = data2[user].name;
           //console.log("U2: "+u2);
           users = {u1: u1, u2: u2};
 
-          var check = checkExistingChat(u1,u2);
+          var check = checkExistingChat(u1,u2, n1, n2);
           if(!check) {
-            createChat(u1,u2);
+            createChat(u1, u2, n1, n2);
             break;
           }
         }
@@ -325,6 +387,7 @@ function displayMessage(key, name, text, picUrl, imageUrl) {
   messageInputElement.focus();
 }
 
+
 // Enables or disables the submit button depending on the values of the input
 // fields.
 function toggleButton() {
@@ -379,3 +442,5 @@ mediaCaptureElement.addEventListener('change', onMediaFileSelected);
 
 // initialize Firebase
 initFirebaseAuth();
+
+loadConversations();
