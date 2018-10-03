@@ -29,15 +29,21 @@ function requestNotificationsPermissions() {
   });
 }
 
-function saveCurUserLoc(user, userLoc) {
+var userEmail = null;
+async function saveCurUserLoc(user, userLoc) {
   // Add a new message entry to the Firebase Database.
   var filepath = '/users/' + getUserID();
   //filepath = '/users/' + "steve"
   console.log("User: "+getUserID()+" @ T: "+d.getTime());
+
+  userEmail = getUserEmail();
+
+  //console.log("userToken 2: "+userToken);
   return firebase.database().ref(filepath).update({
     name: getUserName(),
     loc: userLoc,
-    time: d.getTime()
+    time: d.getTime(),
+    email: userEmail
   }).catch(function(error) {
     console.error('Error writing new message to Firebase Database', error);
   });
@@ -281,7 +287,7 @@ function initMap() {
 function placeMarker(data, uID) {
 
   var contentString = "<div id='content'>"+
-    "<a href=\"#\" onclick=\"chatWithUser(\'"+uID+"\')\" class='nav-link btn btn-outline-success'>"+
+    "<a href=\"#\" onclick=\"chatWithUser(\'"+data.email+"\')\" class='nav-link btn btn-outline-success'>"+
     "Chat with: "+data.name+
     "</a>"+
     "</div>";

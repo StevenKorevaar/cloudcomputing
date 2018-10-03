@@ -24,8 +24,8 @@
 		</header>
 
 		<div class="mdl-layout__drawer">
-			<span class="mdl-layout-title">Conversations</span>
-			<ul class="navbar-nav mr-auto">
+			
+			<ul class="navbar-nav mr-auto sidebar">
 				
 				<li id="user-container" style="display: none;">
 					<div hidden id="user-pic"></div>
@@ -37,10 +37,26 @@
 						<i class="material-icons">account_circle</i>Sign-in with Google
 					</button>
 				</li>
-				</br>
+				</hr>
+				<span class="mdl-layout-title">Navigation</span>
+				<nav class="mdl-navigation" id="LinksList">
+					<a class="mdl-navigation__link" href="/">Home Page</a>
+				</nav>
+
+
+				</hr>
+				<span class="mdl-layout-title">Conversations</span>
+				<nav class="mdl-navigation" id="ConversationsList">
+					<a class="mdl-navigation__link" href="#">Conversation</a>
+				</nav>
+				<!--
 				<li class="nav-item active">
 					<a class="nav-link" href="/">Home Page</a>
 				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">Chats</a>
+				</li>
+			-->
 			</ul>
 		</div>
 
@@ -97,44 +113,6 @@
 	<!--
 	<script type="text/javascript" src="socketio.js"></script>
     -->
-	<script>
-		/*
-		function sendMessage() {
-			var message = $('#msg').val();
-			$('#msg').val('');
-    	    
-			var sentOrReceieved = "sent";
-			var color = "mdl-color--primary";
-			var userName = "Steven";
-			var time = timeNow();
-
-    	    var element = $("<div class=\"messageBox "+sentOrReceieved+"\">"
-            	+	"<p class=\"sender\">"
-            	+		userName +":"
-            	+	"</p>"
-            	+	"<div class=\"message  "+sentOrReceieved+" "+color+" messageText\">"
-            	+		message
-            	+	"</div>"
-				+	"<div class=\"messageTime messageText\">"+time+"</div>"
-            	+"</div>");
-    	    
-    	    $('.room-messages').append(element);
-    			
-            var height = $('.room-messages')[0].scrollHeight;
-            $('.room-messages').scrollTop(height);
-
-		}
-
-		function timeNow() {
-			var d = new Date(),
-				h = (d.getHours()<10?'0':'') + d.getHours(),
-				m = (d.getMinutes()<10?'0':'') + d.getMinutes();
-			console.log(h);
-			console.log(m);
-			return (h + ':' + m);
-		}
-		*/
-		</script>
 		
 		<script src="/__/firebase/5.5.0/firebase-app.js"></script>
 		<script src="/__/firebase/5.5.0/firebase-auth.js"></script>

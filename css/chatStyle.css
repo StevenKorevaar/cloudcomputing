@@ -242,3 +242,7 @@ button
 .imageMessage {
     max-width: 100%;
 }
+
+.sidebar {
+    padding: 5px;
+}

@@ -164,43 +164,59 @@ function createChat(u1, u2) {
   if(!chatExists) {
     var ref = firebase.database().ref('/chats/').push();
     var chatID = ref.key;
-    console.log("created new chat: "+chatID)
+
+    //console.log("New Chat ID: "+chatID)
     messagesURL = "/chats/"+chatID+"/messages/";
-    
+    //console.log("U2 create chat: "+u2);
+
     ref.set({
       u1: u1,
       u2: u2
     }).catch(function(error) {
       console.error('Error Creating new Chat in Firebase Database', error);
     });
-    console.log(chatID);
+    //console.log(chatID);
+    //console.log("created new chat: "+chatID)
     loadMessages();
   }
 }
 
 var users = -1;
-function loadUser() {
+async function loadUser() {
   var ref = firebase.database().ref("/users/"+getUserID());
-  ref.on("value", function(snap) {
+  await ref.once("value", async function(snap) {
     //console.log(snap.key);
     var data = snap.val();
     //console.log(data);
-    var u1 = snap.key;
+    //var u1 = snap.key;
+    var u1 = data.email;
+    var otherUseremail = data.lastChat;
+    //console.log("U1: "+u1);
 
-    var ref2 = firebase.database().ref("/users/"+data.lastChat );
-    ref2.on("value", function(snap2) {
-      //console.log(snap.key);
+    var ref2 = firebase.database().ref("/users/");
+    let resp = await ref2.once("value", function(snap2) {
+      
+      //console.log(snap2.key);
       //console.log(snap2.val());
-      //var data2 = snap2.val();
-      var u2 = snap2.key;
-      users = {u1: u1, u2: u2};
+      var data2 = snap2.val();
+      //var u2 = snap2.key;
+      
 
-      var check = checkExistingChat(u1,u2);
-      if(!check) {
-        createChat(u1,u2);
+      for (var user in snap2.val()) {
+        if(data2[user].email = otherUseremail) {
+          var u2 = data2[user].email; 
+          //console.log("U2: "+u2);
+          users = {u1: u1, u2: u2};
+
+          var check = checkExistingChat(u1,u2);
+          if(!check) {
+            createChat(u1,u2);
+            break;
+          }
+        }
+        
       }
     });
-
   });
 }
 
@@ -363,5 +379,3 @@ mediaCaptureElement.addEventListener('change', onMediaFileSelected);
 
 // initialize Firebase
 initFirebaseAuth();
-
-// We load currently existing chat messages and listen to new ones.
