@@ -248,6 +248,10 @@ button
     max-width: 100%;
 }
 
-.sidebar {
+.sidebar { 
     padding: 5px;
+}
+
+.conversation.mdl-navigation__link {
+    padding: 16px 10px !important; 
 }

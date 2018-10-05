@@ -156,7 +156,7 @@ function displayChat(key, user, email) {
   var textnode = document.createTextNode(user+" - "+email);
   node.appendChild(textnode);
 
-  node.setAttribute("class", "mdl-navigation__link");
+  node.setAttribute("class", "mdl-navigation__link conversation");
   node.setAttribute("href", "#");
   node.setAttribute("onclick", "chatWithUser('"+email+"')");
   node.setAttribute("id", email);
@@ -212,7 +212,7 @@ async function checkExistingChat(u1, u2, n1, n2) {
 
     //console.log("after loop");
   });
-  //console.log("after function");
+  console.log("after function");
   createChat(u1, u2, n1, n2);
   return false;
 }
@@ -236,7 +236,8 @@ function createChat(u1, u2, n1, n2) {
       console.error('Error Creating new Chat in Firebase Database', error);
     });
     //console.log(chatID);
-    //console.log("created new chat: "+chatID)
+    console.log("created new chat: "+chatID)
+    chatExists = true;
     loadMessages();
   }
 }

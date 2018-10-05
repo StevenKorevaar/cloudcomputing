@@ -6,7 +6,9 @@
 		<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 		<link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.deep_purple-pink.min.css">
 		<link href='https://fonts.googleapis.com/css?family=Roboto:400,500,700' rel='stylesheet' type='text/css'>
-	  	<link rel="stylesheet" href="css/chatStyle.css">
+
+		<link rel="stylesheet" href="css/chatStyle.css">
+		
 	<title>Sonar Messaging</title>
 </head>
 <body>
@@ -37,17 +39,18 @@
 						<i class="material-icons">account_circle</i>Sign-in with Google
 					</button>
 				</li>
+
 				</hr>
 				<span class="mdl-layout-title">Navigation</span>
 				<nav class="mdl-navigation" id="LinksList">
 					<a class="mdl-navigation__link" href="/">Home Page</a>
+					<a class="mdl-navigation__link" href="/chat.html">Universal Chat</a>
 				</nav>
-
 
 				</hr>
 				<span class="mdl-layout-title">Conversations</span>
 				<nav class="mdl-navigation" id="ConversationsList">
-					<!--<a class="mdl-navigation__link" href="#">Conversation</a>-->
+					<!--<a class="mdl-navigation__link conversation" href="#">Conversation</a>-->
 				</nav>
 
 
@@ -118,7 +121,6 @@
 		-->
 		<script>
 			function removeMessageLabel() {
-				console.log("HERE");
 				if ($("#message").val() != "" ){
 					$("#messageLabel").addClass("disappearOnFocus");
 				}

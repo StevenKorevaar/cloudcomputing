@@ -1,35 +1,63 @@
 'use strict';
+var d = new Date();
 
-function signIn() {
-  // Sign in Firebase using popup auth and Google as the identity provider.
-  var provider = new firebase.auth.GoogleAuthProvider();
-  firebase.auth().signInWithPopup(provider);
+function loadConversations() {
+  // Loads the last 12 messages and listen for new ones.
+  var callback = function(snap) {
+    var data = snap.val();
+    //console.log(data);
+    var curUserEmail = getUserEmail();
+    var toDisplayEmail = "";
+    var toDisplayName = "";
+
+    if(data.u1 == curUserEmail) {
+      toDisplayEmail = data.u2;
+      toDisplayName = data.n2;
+    }
+    else {
+      toDisplayEmail = data.u1;
+      toDisplayName = data.n1;
+    }
+
+    displayChat(snap.key, toDisplayName, toDisplayEmail);
+  };
+
+  firebase.database().ref("/chats/").on('child_added', callback);
+  firebase.database().ref("/chats/").on('child_changed', callback);
 }
 
-function signOut() {
-  // Sign out of Firebase.
-  firebase.auth().signOut();
+function displayChat(key, user, email) {
+  if(document.getElementById(email) != null) {
+    return false;
+  }
+  var node = document.createElement("a");
+
+  var textnode = document.createTextNode(user+" - "+email);
+  node.appendChild(textnode);
+
+  node.setAttribute("class", "mdl-navigation__link conversation");
+  node.setAttribute("href", "#");
+  node.setAttribute("onclick", "chatWithUser('"+email+"')");
+  node.setAttribute("id", email);
+  document.getElementById("ConversationsList").appendChild(node);
 }
 
-// Initiate firebase auth.
-function initFirebaseAuth() {
-  // Listen to auth state changes.
-  firebase.auth().onAuthStateChanged(authStateObserver);
+function chatWithUser(otherUser) {
+  saveChatWith(otherUser);
+  window.location.href = "/privateChat.html";
 }
 
-// Returns the signed-in user's profile Pic URL.
-function getProfilePicUrl() {
-  return firebase.auth().currentUser.photoURL || '/images/profile_placeholder.png';
-}
-
-// Returns the signed-in user's display name.
-function getUserName() {
-  return firebase.auth().currentUser.displayName;
-}
-
-// Returns true if a user is signed-in.
-function isUserSignedIn() {
-  return !!firebase.auth().currentUser;
+function saveChatWith(otherUser) {
+  // Add a new message entry to the Firebase Database.
+  var filepath = '/users/' + getUserID();
+  //console.log("OTHERUSER: "+otherUser);
+  return firebase.database().ref(filepath).update({
+    time: d.getTime(),
+    lastChat: otherUser
+  }).catch(function(error) {
+    console.error('Error writing new message to Firebase Database', error);
+  });
+  
 }
 
 // Loads chat messages history and listens for upcoming ones.
@@ -40,8 +68,8 @@ function loadMessages() {
     displayMessage(snap.key, data.name, data.text, data.profilePicUrl, data.imageUrl);
   };
 
-  firebase.database().ref('/messages/').limitToLast(10).on('child_added', callback);
-  firebase.database().ref('/messages/').limitToLast(10).on('child_changed', callback);
+  firebase.database().ref('/messages/').on('child_added', callback);
+  firebase.database().ref('/messages/').on('child_changed', callback);
 }
 
 // Saves a new message on the Firebase DB.
@@ -304,3 +332,4 @@ initFirebaseAuth();
 
 // We load currently existing chat messages and listen to new ones.
 loadMessages();
+loadConversations();
