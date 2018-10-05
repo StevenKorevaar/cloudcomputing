@@ -160,7 +160,6 @@ function displayChat(key, user, email) {
   node.setAttribute("href", "#");
   node.setAttribute("onclick", "chatWithUser('"+email+"')");
   node.setAttribute("id", email);
-
   document.getElementById("ConversationsList").appendChild(node);
 }
 
@@ -200,9 +199,11 @@ async function checkExistingChat(u1, u2, n1, n2) {
         if( (u1 == du1 || u1 == du2) && (u2 == du1 || u2 == du2) ) {
           chatID = chat;
           chatExists = true;
+          
+          document.getElementById("OtherPersonsName").innerHTML = u2;
 
           messagesURL = "/chats/"+chatID+"/messages/";
-          console.log("FOUND CHAT: "+ messagesURL);
+          //console.log("FOUND CHAT: "+ messagesURL);
           loadMessages();
           return true;
         }

@@ -17,7 +17,7 @@
 						<!-- Title -->
 						<span class="mdl-layout-title ">Chat with 
 							<b id="OtherPersonsName">
-								Placeholder
+								...
 							</b>
 						</span>
 				</div>
@@ -84,8 +84,8 @@
 			<div class="response">	
 				<form id="message-form" action="#">
 					<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label" id="MessageTextAndLabel">
-						<input class="mdl-textfield__input" type="text" id="message">
-						<label class="mdl-textfield__label" for="message">Message...</label>
+						<input class="mdl-textfield__input" type="text" id="message" oninput="removeMessageLabel()">
+						<label class="mdl-textfield__label" for="message"><span id="messageLabel">Message...</span></label>
 					</div>
 					<button id="submit" onclick="" disabled type="submit" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
 						Send
@@ -115,7 +115,18 @@
 	<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
 	<!--
 	<script type="text/javascript" src="socketio.js"></script>
-    -->
+		-->
+		<script>
+			function removeMessageLabel() {
+				console.log("HERE");
+				if ($("#message").val() != "" ){
+					$("#messageLabel").addClass("disappearOnFocus");
+				}
+				else {
+					$("#messageLabel").removeClass("disappearOnFocus");
+				}
+			}
+		</script>
 		
 		<script src="/__/firebase/5.5.0/firebase-app.js"></script>
 		<script src="/__/firebase/5.5.0/firebase-auth.js"></script>

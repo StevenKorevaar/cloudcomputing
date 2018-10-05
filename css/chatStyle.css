@@ -102,6 +102,11 @@ html
     opacity:0.5;
 }
 
+.disappearOnFocus {
+    display:none;
+} 
+
+
 .response {
     position:absolute;
     bottom:0;
