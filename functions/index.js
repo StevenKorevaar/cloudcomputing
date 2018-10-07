@@ -34,7 +34,7 @@ const spawn = require('child-process-promise').spawn;
 const path = require('path');
 const os = require('os');
 const fs = require('fs');
-
+const Canvas = require('canvas');
 
 // Adds a message that welcomes new users into the chat.
 exports.addWelcomeMessages = functions.auth.user().onCreate(async (user) => {
@@ -122,7 +122,7 @@ function highlightFaces(inputFile, faces, outputFile, Canvas, callback) {
 }
 
 async function boundFaces(image, faces, filePath) {
-  console.log("INSIDE BOUND FACES");
+  console.log("INSIDE BOUND FACES Updated");
   const Image = Canvas.Image;
   console.log("Created Canvas");
 
@@ -166,12 +166,17 @@ async function boundFaces(image, faces, filePath) {
   });
 
   console.log('Writing to file ' + tempLocalFile);
+  /*
   const writeStream = fs.createWriteStream(tempLocalFile);
   const pngStream = canvas.pngStream();
 
   await pngStream.on('data', chunk => {
     writeStream.write(chunk);
   });
+  */
+
+  var buf = canvas.toBuffer();
+  fs.writeFileSync(tempLocalFile, buf);
 
   await bucket.upload(tempLocalFile, {destination: filePath});
   console.log('Faces Highlighted image has been uploaded to', filePath);
@@ -203,6 +208,8 @@ async function blurImage(filePath) {
   //console.log('Marked the image as moderated in the database.');
 }
 
+
+var processedImages = [];
 // Checks if uploaded images are flagged as Adult or Violence and if so blurs them.
 exports.processImage = functions.runWith({memory: '2GB'}).storage.object().onFinalize(
   async (object) => {
@@ -210,7 +217,13 @@ exports.processImage = functions.runWith({memory: '2GB'}).storage.object().onFin
       source: {imageUri: `gs://${object.bucket}/${object.name}`},
     };
     
-    
+    for (var count = 0; count < processedImages.length; count++) {
+      if(processedImages[count] == object.name) {
+        exists = true;
+        return false;
+      }
+    }
+
     // Check the image content using the Cloud Vision API.
     const batchAnnotateImagesResponse = await vision.faceDetection(image);
     /*
@@ -222,11 +235,11 @@ exports.processImage = functions.runWith({memory: '2GB'}).storage.object().onFin
     console.log("-------------------------------------------------");
     */
 
-   console.log("-------------------------------------------------");
+    console.log("-------------------------------------------------");
     const faces = batchAnnotateImagesResponse[0].faceAnnotations;
     const numFaces = faces.length;
     console.log('Found ' + numFaces + (numFaces === 1 ? ' face' : ' faces'));
-
+    processedImages.push(object.name);
     if(numFaces >= 1) {
       console.log("Entering BoundFaces");
       return boundFaces(image, faces, object.name);
