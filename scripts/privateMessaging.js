@@ -165,7 +165,7 @@ function displayChat(key, user, email) {
 
 function chatWithUser(otherUser) {
   saveChatWith(otherUser);
-  window.location.href = "/privateChat.html";
+  window.location.href = "/chat.html";
 }
 
 function saveChatWith(otherUser) {
@@ -212,7 +212,7 @@ async function checkExistingChat(u1, u2, n1, n2) {
 
     //console.log("after loop");
   });
-  console.log("after function");
+  //console.log("after function");
   createChat(u1, u2, n1, n2);
   return false;
 }
@@ -226,6 +226,7 @@ function createChat(u1, u2, n1, n2) {
     //console.log("New Chat ID: "+chatID)
     messagesURL = "/chats/"+chatID+"/messages/";
     //console.log("U2 create chat: "+u2);
+    //console.log("Create Chat n2: "+n2);
 
     ref.set({
       u1: u1,
@@ -254,6 +255,13 @@ async function loadUser() {
     var n1 = data.name;
     var otherUseremail = data.lastChat;
 
+    if (otherUseremail == "" || otherUseremail == null) {
+      messagesURL = "/messages/";
+      document.getElementById("OtherPersonsName").innerHTML = "Everyone";
+      loadMessages();
+      return true;
+    }
+
     //console.log("U1: "+u1);
 
     var ref2 = firebase.database().ref("/users/");
@@ -266,13 +274,13 @@ async function loadUser() {
       
 
       for (var user in snap2.val()) {
-        if(data2[user].email = otherUseremail) {
+        if(data2[user].email == otherUseremail) {
           var u2 = data2[user].email; 
           var n2 = data2[user].name;
           //console.log("U2: "+u2);
           users = {u1: u1, u2: u2};
 
-          var check = checkExistingChat(u1,u2, n1, n2);
+          var check = checkExistingChat(u1, u2, n1, n2);
           if(!check) {
             createChat(u1, u2, n1, n2);
             break;

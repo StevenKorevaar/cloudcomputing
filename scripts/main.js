@@ -50,26 +50,6 @@ async function saveCurUserLoc(user, userLoc) {
   
 }
 
-function chatWithUser(otherUser) {
-  saveChatWith(otherUser);
-  window.location.href = "/privateChat.html";
-}
-
-function saveChatWith(otherUser) {
-  // Add a new message entry to the Firebase Database.
-  var filepath = '/users/' + getUserID();
-  //console.log("OTHERUSER: "+otherUser);
-  return firebase.database().ref(filepath).update({
-    name: getUserName(),
-    loc: curUserPos,
-    time: d.getTime(),
-    lastChat: otherUser
-  }).catch(function(error) {
-    console.error('Error writing new message to Firebase Database', error);
-  });
-  
-}
-
 // Triggers when the auth state change for instance when the user signs-in or signs-out.
 function authStateObserver(user) {
   if (user) { // User is signed in!

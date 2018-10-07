@@ -45,3 +45,23 @@ function getUserID() {
 function isUserSignedIn() {
   return !!firebase.auth().currentUser;
 }
+
+function chatWithUser(otherUser) {
+  saveChatWith(otherUser);
+  window.location.href = "/chat.html";
+}
+
+function saveChatWith(otherUser) {
+  // Add a new message entry to the Firebase Database.
+  var filepath = '/users/' + getUserID();
+  //console.log("OTHERUSER: "+otherUser);
+  return firebase.database().ref(filepath).update({
+    name: getUserName(),
+    loc: curUserPos,
+    time: d.getTime(),
+    lastChat: otherUser
+  }).catch(function(error) {
+    console.error('Error writing new message to Firebase Database', error);
+  });
+  
+}
