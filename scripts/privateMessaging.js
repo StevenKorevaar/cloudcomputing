@@ -45,34 +45,6 @@ function saveImageMessage(file) {
   });
 }
 
-// Saves the messaging device token to the datastore.
-function saveMessagingDeviceToken() {
-  firebase.messaging().getToken().then(function(currentToken) {
-    if (currentToken) {
-      console.log('Got FCM device token:', currentToken);
-      // Saving the Device Token to the datastore.
-      firebase.database().ref('/fcmTokens').child(currentToken)
-          .set(firebase.auth().currentUser.uid);
-    } else {
-      // Need to request permissions to show notifications.
-      requestNotificationsPermissions();
-    }
-  }).catch(function(error){
-    console.error('Unable to get messaging token.', error);
-  });
-}
-
-// Requests permissions to show notifications.
-function requestNotificationsPermissions() {
-  console.log('Requesting notifications permission...');
-  firebase.messaging().requestPermission().then(function() {
-    // Notification permission granted.
-    saveMessagingDeviceToken();
-  }).catch(function(error) {
-    console.error('Unable to get permission to notify.', error);
-  });
-}
-
 // Triggered when a file is selected via the media picker.
 function onMediaFileSelected(event) {
   event.preventDefault();
@@ -161,24 +133,6 @@ function displayChat(key, user, email) {
   node.setAttribute("onclick", "chatWithUser('"+email+"')");
   node.setAttribute("id", email);
   document.getElementById("ConversationsList").appendChild(node);
-}
-
-function chatWithUser(otherUser) {
-  saveChatWith(otherUser);
-  window.location.href = "/chat.html";
-}
-
-function saveChatWith(otherUser) {
-  // Add a new message entry to the Firebase Database.
-  var filepath = '/users/' + getUserID();
-  //console.log("OTHERUSER: "+otherUser);
-  return firebase.database().ref(filepath).update({
-    time: d.getTime(),
-    lastChat: otherUser
-  }).catch(function(error) {
-    console.error('Error writing new message to Firebase Database', error);
-  });
-  
 }
 
 var chatID = "";
@@ -318,13 +272,7 @@ function authStateObserver(user) {
     loadUser();
   } 
   else { // User is signed out!
-    // Hide user's profile and sign-out button.
-    userNameElement.setAttribute('hidden', 'true');
-    userPicElement.setAttribute('hidden', 'true');
-    signOutButtonElement.setAttribute('hidden', 'true');
-
-    // Show sign-in button.
-    signInButtonElement.removeAttribute('hidden');
+    window.location.href = "/";
   }
 }
 
@@ -352,11 +300,13 @@ function resetMaterialTextfield(element) {
 
 // Template for messages.
 var MESSAGE_TEMPLATE =
-    '<div class="message-container messageBox">' +
+  '<div class="message-container messageBox">' +
+    '<div class="senderRow" >'+
       '<div class="spacing"><div class="pic"></div></div>' +
-      '<div class="message"></div>' +
       '<div class="name"></div>' +
-    '</div>';
+    '</div>'+
+    '<div class="message"></div>' +
+  '</div>';
 
 // A loading image URL.
 var LOADING_IMAGE_URL = 'https://www.google.com/images/spin-32.gif?a';
@@ -364,7 +314,7 @@ var LOADING_IMAGE_URL = 'https://www.google.com/images/spin-32.gif?a';
 // Displays a Message in the UI.
 function displayMessage(key, name, text, picUrl, imageUrl) {
   var div = document.getElementById(key);
-  // If an element for that message does not exists yet we create it.
+
   if (!div) {
     var container = document.createElement('div');
     container.innerHTML = MESSAGE_TEMPLATE;
@@ -372,10 +322,20 @@ function displayMessage(key, name, text, picUrl, imageUrl) {
     div.setAttribute('id', key);
     messageListElement.appendChild(div);
   }
+
   if (picUrl) {
     div.querySelector('.pic').style.backgroundImage = 'url(' + picUrl + ')';
   }
+
   div.querySelector('.name').textContent = name;
+
+  if(name == getUserName()) {
+    div.querySelector('.message').classList.add("sent");
+  }
+  else {
+    div.querySelector('.message').classList.add("received");
+  }
+
   var messageElement = div.querySelector('.message');
   if (text) { // If the message is text.
     messageElement.textContent = text;
@@ -428,11 +388,12 @@ var submitButtonElement = document.getElementById('submit');
 var imageButtonElement = document.getElementById('submitImage');
 var imageFormElement = document.getElementById('image-form');
 var mediaCaptureElement = document.getElementById('mediaCapture');
+
+// Shortcuts to DOM Elements.
 var userPicElement = document.getElementById('user-pic');
 var userNameElement = document.getElementById('user-name');
 var signInButtonElement = document.getElementById('sign-in');
 var signOutButtonElement = document.getElementById('sign-out');
-var signInSnackbarElement = document.getElementById('must-signin-snackbar');
 
 // Saves message on form submit.
 messageFormElement.addEventListener('submit', onMessageFormSubmit);

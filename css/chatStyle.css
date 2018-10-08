@@ -77,17 +77,21 @@ html
 {
     display: inline-block;
     padding: 10px 15px 10px 15px;
-    margin-top:10px;
+    margin-left:15px;
+    margin-bottom:10px;
     color:rgb(0,0,0);
     background-color: rgb(255, 255, 255);
-    border-radius: 2px 5px 5px 5px;
+    border-radius: 2px 15px 15px 15px;
     
+}
+
+#submitImage {
+    background-color: #6739b9 !important;
 }
 
 .message.sent
 {
     background-color: rgb(103,58,183);
-    border-radius: 5px 2px 5px 5px;
     color:rgb(255,255,255);
 }
 
@@ -221,6 +225,10 @@ button
     display: inline-block;
     width: 70px;
 }
+#submit.active {
+    background-color: #a477f5;
+    color: white;
+}
 
 @media screen and (max-width: 610px) {
   
@@ -255,4 +263,26 @@ button
 
 .conversation.mdl-navigation__link {
     padding: 16px 10px !important; 
+}
+
+.message-container .pic {
+    background-image: url('/images/profile_placeholder.png');
+    background-repeat: no-repeat;
+    width: 30px;
+    height: 30px;
+    background-size: 30px;
+    border-radius: 20px;
+  }
+
+.senderRow {
+    padding: 5px;
+}
+
+.name {
+    padding: 5px;
+    padding-left: 35px;
+}
+   
+.spacing {
+    float:left;
 }

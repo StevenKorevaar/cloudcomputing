@@ -9,7 +9,6 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 		
 		<link rel="stylesheet" href="css/homeStyle.css">
-
 	</head>
 	<body>
 		
@@ -35,7 +34,10 @@
 						</li>
 						<li class="nav-item">
 							<!--<a class="nav-link" href="/chat.html">Universal Chat Page</a>-->
-							<a class="nav-link" href="#" onclick="chatWithUser('')">Universal Chat Page</a>
+							<a class="nav-link popup" href="#" onclick="chatWithUserPosition('')">Universal Chat Page
+								<span class="popuptext" id="mustSignInPopup">You Must Sign In First</span>
+							</a>
+							
 						</li>
 					</ul>
 	
@@ -52,22 +54,6 @@
 							</button>
 						</div>
 						
-						<!--
-						<div class="nav-item user-container">
-							<div hidden id="user-pic"></div>
-							<div hidden id="user-name"></div>
-							<button hidden id="sign-out" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
-								Sign-out
-							</button>
-							<button hidden id="sign-in" class="btn btn-outline-success my-2 my-sm-0">
-								<i class="material-icons"></i>Sign-in with Google
-							</button>
-						</div>
-						-->
-						<!--
-						<input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-						<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-						-->
 					</div>
 				</div>
 			</nav>
@@ -77,8 +63,6 @@
 				<div id="map"></div>
 			</div>			
 		</div>
-
-		
 		
 		<!--<link rel="stylesheet" href="styles/main.css">-->
 
