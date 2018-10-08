@@ -1,64 +1,82 @@
+<!--
+  Made By:
+    Steven Korevaar - s3544280
+    Ryan Tran - s3201690
+
+  References:
+    1. https://codelabs.developers.google.com/codelabs/firebase-web/#0
+		4. https://developers.google.com/maps/documentation/javascript/examples/marker-remove
+		5. https://developers.google.com/maps/documentation/javascript/tutorial
+		6. https://medium.com/@limichelle21/integrating-google-maps-api-for-multiple-locations-a4329517977a
+-->
+
 <!DOCTYPE html>
 <html>
 	<head>
 		<title>Sonar Messaging</title>
 		<meta charset="UTF-8">
+		<!-- Get all Dependent content -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 		<script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
 		<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-		
+		<!-- Update the favicon stuff for all different types of browsers and devices -->
+		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+		<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+		<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+		<link rel="manifest" href="/site.webmanifest">
+		<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#795bd5">
+		<meta name="msapplication-TileColor" content="#603cba">
+		<meta name="theme-color" content="#ffffff">
+		<!-- Get the home page's style sheet -->
 		<link rel="stylesheet" href="css/homeStyle.css">
 	</head>
 	<body>
-		
-		
-		<!--CONTENT-->
-
+		<!-- an outer div encases all content in order to make the map fill the rest of the screen from the navbar onwards -->
 		<div id="outer"> 
-			<!--
-			<div class="row justify-content-center inner_fixed">
-				<div class="align-middle"><h1> Welcome to Sonar Messaging </h1></div>
-			</div>
-			-->
-
+			<!-- nav bar -->
 			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+				<!-- Hamburger navbar toggle button -->
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo01" aria-controls="navbarTogglerDemo01" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
+
+				<!-- All content of the navbar which will hide when the navar gets too thin -->
 				<div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+					<!-- Name of the Webpage -->
 					<a class="navbar-brand" href="#">Sonar Messaging</a>
+					<!-- list of all links on the navbar -->
 					<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+						<!-- Link back home -->
 						<li class="nav-item active">
 							<a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
 						</li>
+						<!-- Link to the Unversal Chat Page -->
 						<li class="nav-item">
-							<!--<a class="nav-link" href="/chat.html">Universal Chat Page</a>-->
 							<a class="nav-link popup" href="#" onclick="chatWithUserPosition('')">Universal Chat Page
 								<span class="popuptext" id="mustSignInPopup">You Must Sign In First</span>
 							</a>
-							
 						</li>
 					</ul>
 	
+					<!-- Sign in and Sign out Form -->
 					<div class="form-inline my-2 my-lg-0">
-						
 						<div id="user-container" class="nav-item">
 							<div hidden id="user-pic"></div>
 							<div hidden id="user-name"></div>
 							<button hidden id="sign-out" class="btn btn-outline-failure mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
 								Sign-out
 							</button>
+
 							<button hidden id="sign-in" class="btn btn-outline-success mdl-button mdl-js-button mdl-js-ripple-effect mdl-color-text--white">
 								Sign-in with Google
 							</button>
 						</div>
-						
 					</div>
 				</div>
 			</nav>
 
-
+			<!-- The map which takes up the rest of the page -->
 			<div class="inner_remaining">
 				<div id="map"></div>
 			</div>			
@@ -66,6 +84,7 @@
 		
 		<!--<link rel="stylesheet" href="styles/main.css">-->
 
+		<!-- Load javascript files last -->
 		<script src="/__/firebase/5.5.0/firebase-app.js"></script>
 		<script src="/__/firebase/5.5.0/firebase-auth.js"></script>
 		<script src="/__/firebase/5.5.0/firebase-database.js"></script>

@@ -1,3 +1,13 @@
+/*
+  Made By:
+    Steven Korevaar - s3544280
+    Ryan Tran - s3201690
+
+  References:
+    1. https://cloud.google.com/vision/docs/face-tutorial
+    2. https://codelabs.developers.google.com/codelabs/firebase-cloud-functions/#0
+*/
+
 // Import the Firebase SDK for Google Cloud Functions
 const functions = require('firebase-functions');
 // Import and initialize the Firebase Admin SDK.
@@ -70,7 +80,7 @@ async function boundFaces(image, faces, filePath) {
 
   // Loop through each face in the input faces array
   faces.forEach(face => {
-    // Set a stroke style and line width
+    // Set a default stroke style and line width as white
     context.strokeStyle = 'rgba(255,255,255,0.8)';
     context.lineWidth = '5';
     
@@ -80,16 +90,19 @@ async function boundFaces(image, faces, filePath) {
     console.log(`    Sorrow: ${face.sorrowLikelihood}`);
     */
 
+    // If the detected face is Happy we want to have a green square
     if(face.joyLikelihood == "LIKELY" || face.joyLikelihood == "VERY_LIKELY") {
       context.strokeStyle = 'rgba(0,255,0,0.8)';
       context.lineWidth = '5';
       console.log("JOY");
     }
+    // If the detected face is Angry we want to have a red square
     else if (face.angerLikelihood == "LIKELY" || face.angerLikelihood == "VERY_LIKELY") {
       context.strokeStyle = 'rgba(255,0,0,0.8)';
       context.lineWidth = '5';
       console.log("ANGER");
     }
+    // If the detected face is Sad we want to have a blue square
     else if (face.sorrowLikelihood == "LIKELY" || face.sorrowLikelihood == "VERY_LIKELY") {
       context.strokeStyle = 'rgba(0,0,255,0.8)';
       context.lineWidth = '5';

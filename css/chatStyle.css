@@ -1,3 +1,12 @@
+/*
+  Made By:
+    Steven Korevaar - s3544280
+    Ryan Tran - s3201690
+
+  References:
+    1. https://codelabs.developers.google.com/codelabs/firebase-web/#0
+*/
+
 html
 {
      background-color:rgb(234, 234, 234);
@@ -175,43 +184,6 @@ button
     margin:10px 0px;
 }
 
-/* Overlay */
-#overlay {
-    position:fixed;
-    top:0;
-    left:0;
-    right:0;
-    bottom:0;
-    margin:auto;
-    background-color:rgba(255,255,255,0.8);
-    z-index:1000;
-    opacity:0;
-    visibility:hidden;
-    pointer-events:none;
-    transition:opacity 0.25s ease, visibility 0.25s ease;
-}
-
-#overlay.show {
-    opacity:1;
-    visibility:visible;
-}
-
-#overlay > div {
-    position:absolute;
-    width:500px;
-    margin:auto;
-    height:90px;
-    top:0;
-    left:0;
-    bottom:0;
-    right:0;
-}
-
-#overlay h1 {
-    margin:0px 0px 10px 0px;
-    text-align:center;
-}
-
 .response {
     display: inline-block;
 }
@@ -228,10 +200,6 @@ button
 #submit.active {
     background-color: #a477f5;
     color: white;
-}
-
-@media screen and (max-width: 610px) {
-  
 }
 
 #message-form {

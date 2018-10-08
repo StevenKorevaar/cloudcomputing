@@ -1,4 +1,11 @@
+/*
+  Made By:
+    Steven Korevaar - s3544280
+    Ryan Tran - s3201690
 
+  Code FIle References:
+    1. https://www.w3schools.com/howto/howto_js_popup.asp
+*/
 
 /* FILL CONTENT */
 html, body, #outer {
@@ -62,10 +69,8 @@ html, body, #outer {
   top: -10%;
   left: 50%;
   margin-left: -5px;
-
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
-  
   border-bottom: 5px solid #555;
 }
 
@@ -85,4 +90,23 @@ html, body, #outer {
 @keyframes fadeIn {
   from {opacity: 0;}
   to {opacity:1 ;}
+}
+
+.userContainer {
+  padding: 5px;
+}
+
+#user-pic {
+  float:left;
+  background-image: url('/images/profile_placeholder.png');
+  background-repeat: no-repeat;
+  width: 30px;
+  height: 30px;
+  background-size: 30px;
+  border-radius: 20px;
+}
+
+#user-name {
+ display: inline-block;
+ padding: 0px 10px;
 }
