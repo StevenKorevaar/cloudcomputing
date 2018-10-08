@@ -1,6 +1,5 @@
 function signIn() {
   // Sign in Firebase using popup auth and Google as the identity provider.
-  // console.log("here signIn()");
   var provider = new firebase.auth.GoogleAuthProvider();
   firebase.auth().signInWithPopup(provider).then(function(user) {
     var user = firebase.auth().currentUser;
@@ -9,6 +8,7 @@ function signIn() {
     // Handle Errors here.
     var errorCode = error.code;
     var errorMessage = error.message;
+    console.log("Error ("+errorCode+"): "+errorMessage);
   });
 }
 

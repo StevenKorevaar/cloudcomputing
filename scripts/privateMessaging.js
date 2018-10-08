@@ -192,6 +192,7 @@ function createChat(u1, u2, n1, n2) {
     });
     //console.log(chatID);
     console.log("created new chat: "+chatID)
+    document.getElementById("OtherPersonsName").innerHTML = n2;
     chatExists = true;
     loadMessages();
   }
