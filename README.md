@@ -1,5 +1,21 @@
-# Firebase Web Codelab - Start code
+Cloud Computing Assignment 2 - Sonar Messaging
 
-This folder contains the starting code for the [Firebase: Build a Real Time Web Chat App Codelab](https://codelabs.developers.google.com/codelabs/firebase-web/).
-
-If you'd like to jump directly to the end and see the finished code head to the [web](../web) directory.
+Members:
+  Steven Korevaar - s3544280 (50%) 
+  Ryan Tran - s3201690
+  
+Description:
+  Sonar Messaging is a simple cloud based messaging app that uses location 
+  services to connect you with the people closest to you. As one of the most 
+  popular past times of our generation, sending selfies has been incorporated 
+  into Sonar Messaging by giving you a dedicated "Send Photo" button alongside 
+  normal text messages. Our cloud processing will automatically find and 
+  highlight any faces it finds within the image, in addition, it will highlight
+  each face with a specific colour depending on the person's mood. 
+    (Green = Happy, Red = Angry, Blue = Sad, White = Neutral)
+    
+Live Link:
+  https://cc-assignment2-sonar-msg.firebaseapp.com
+  
+Git Repository:
+  https://github.com/StevenKorevaar/cloudcomputing
